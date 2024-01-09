@@ -10,7 +10,6 @@ interface Announcement {
 
 export const ViewAnnouncements: React.FC = () => {
   const { data: announcements = [], error: allAnnouncementsError } = api.an.getAllAnnouncements.useQuery();
-  // 'api.an.getAllAnnouncements.useQuery()' is an example and should match your actual API structure
 
   return (
     <div>
