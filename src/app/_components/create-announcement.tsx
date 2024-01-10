@@ -1,24 +1,16 @@
 "use client";
 
-import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "@/trpc/react";
+import { CreateAnnouncementProps } from "@/types/announcement";
 
 import { toast } from "sonner";
-
-interface Announcement {
-  id: string;
-  title: string;
-  content: string;
-}
-
-interface CreateAnnouncementProps {
-  announcementCreated: (newAnnouncement: Announcement) => void;
-}
+import Link from "next/link";
 
 export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
   announcementCreated,
 }) => {
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -52,18 +44,12 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
     }
   };
 
-  const handleGoBack = () => {
-    window.history.back(); // try to use Link or router to navigate, currently doesnt work
-  };
-
   return (
     <div className="flex h-screen flex-col">
-      <button
-        onClick={handleGoBack}
-        className="ml-4 mt-4 self-start text-blue-500 hover:text-blue-700"
-      >
-        &lt; Back
-      </button>
+
+      <Link href="/" className="ml-4 mt-4 self-start bg-blue-500 hover:bg-blue-700 h-9 text-white font-bold py-2 px-4 rounded inline-block" >
+        Back to the labs
+      </Link>
 
       <div className="flex flex-grow items-center justify-center">
         <div className="w-full max-w-md rounded-lg bg-gray-100 p-6">

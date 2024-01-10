@@ -2,12 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { api } from '@/trpc/react';
-
-interface Announcement {
-  id: string;
-  title: string;
-  content: string;
-}
+import { Announcement } from "@/types/announcement";
 
 export const ViewAnnouncements: React.FC = () => {
   const { data: announcements = [], error: allAnnouncementsError } = api.an.getAllAnnouncements.useQuery();
