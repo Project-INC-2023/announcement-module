@@ -9,7 +9,12 @@ export const announcementRouter = createTRPCRouter({
   }),
   
   createAnnouncement: publicProcedure
-    .input(z.object({ title: z.string().min(1), content: z.string().min(1) }))
+    .input(
+      z.object({ 
+        title: z.string().min(1), 
+        content: z.string().min(1) 
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.announcement.create({
         data: {
@@ -19,9 +24,46 @@ export const announcementRouter = createTRPCRouter({
       })
     }),
 
+    updateAnnouncement: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().min(1),
+        content: z.string().min(1),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, title, content } = input;
+
+      const updatedAnnouncement = await ctx.db.announcement.update({
+        where: {
+          id,
+        },
+        data: {
+          title,
+          content,
+        },
+      });
+
+      return updatedAnnouncement;
+    }),
+
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.db.announcement.findFirst({
       orderBy: { createdAt: "desc" },
     });
   }),
+
+  deleteAnnouncement: publicProcedure
+  .input(z.string())
+  .mutation(async ({ ctx, input }) => {
+    const deletedAnnouncement = await ctx.db.announcement.delete({
+      where: {
+        id: input,
+      },
+    });
+
+    return deletedAnnouncement;
+  }),
+
 });
