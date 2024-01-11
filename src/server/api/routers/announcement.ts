@@ -3,34 +3,33 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 
 export const announcementRouter = createTRPCRouter({
-
   getAllAnnouncements: publicProcedure.query(async ({ ctx }) => {
     return ctx.db.announcement.findMany();
   }),
-  
+
   createAnnouncement: publicProcedure
     .input(
-      z.object({ 
-        title: z.string().min(1), 
-        content: z.string().min(1) 
-      })
+      z.object({
+        title: z.string().min(1),
+        content: z.string().min(1),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       return ctx.db.announcement.create({
         data: {
           title: input.title,
-          content: input.content
-        }
-      })
+          content: input.content,
+        },
+      });
     }),
 
-    updateAnnouncement: publicProcedure
+  updateAnnouncement: publicProcedure
     .input(
       z.object({
         id: z.string(),
         title: z.string().min(1),
         content: z.string().min(1),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const { id, title, content } = input;
@@ -55,15 +54,18 @@ export const announcementRouter = createTRPCRouter({
   }),
 
   deleteAnnouncement: publicProcedure
-  .input(z.string())
-  .mutation(async ({ ctx, input }) => {
-    const deletedAnnouncement = await ctx.db.announcement.delete({
-      where: {
-        id: input,
-      },
-    });
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const deletedAnnouncement = await ctx.db.announcement.delete({
+        where: {
+          id: input,
+        },
+      });
 
-    return deletedAnnouncement;
-  }),
+      return deletedAnnouncement;
+    }),
 
+  getSpecificAnnouncement: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {}),
 });

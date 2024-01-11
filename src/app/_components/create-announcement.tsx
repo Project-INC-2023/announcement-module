@@ -10,7 +10,6 @@ import Link from "next/link";
 export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
   announcementCreated,
 }) => {
-
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
@@ -45,12 +44,7 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
   };
 
   return (
-    <div className="flex h-screen flex-col">
-
-      <Link href="/" className="ml-4 mt-4 self-start bg-blue-500 hover:bg-blue-700 h-9 text-white font-bold py-2 px-4 rounded inline-block" >
-        Back to the labs
-      </Link>
-
+    <div className="flex h-full flex-col">
       <div className="flex flex-grow items-center justify-center">
         <div className="w-full max-w-md rounded-lg bg-gray-100 p-6">
           <h1 className="mb-4 text-center text-2xl font-bold">
