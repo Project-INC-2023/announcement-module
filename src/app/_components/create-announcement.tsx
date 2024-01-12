@@ -71,6 +71,7 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
               disabled={createAnnouncement.isLoading}
             >
               {createAnnouncement.isLoading ? "Submitting..." : "Submit"}
+              <p>test</p>
             </button>
           </form>
         </div>
