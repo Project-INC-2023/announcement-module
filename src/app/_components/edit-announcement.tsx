@@ -1,10 +1,8 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Announcement, EditAnnouncementProps } from "@/types/announcement";
-import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EditAnnouncementProps } from "@/types/announcement";
+
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,29 +16,28 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
   const [anouncementContent, setAnnouncementContent] = useState<string>(
     announcement.content,
   );
-  const {
-    data: announcements = [],
-    error: allAnnouncementsError,
-    refetch: reload,
-  } = api.an.getAllAnnouncements.useQuery();
-  const updateAnnouncement = api.an.updateAnnouncement.useMutation();
+  const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
+  const updateAnnouncement = api.an.updateAnnouncement.useMutation({
+    onSuccess: () => {
+      toast.success(`${anouncementTitle} has been edited!`);
+    },
+    onError: (error) => {
+      toast.error(`Update unsuccessful due to ${error.data?.code}`);
+    },
+  });
+
   const closeEditAnnouncement = () => {
     editAnnouncementFunc(announcement, false);
   };
+
   const saveEditAnnouncement = () => {
-    const newAnnouncement = {
+    const updatedAnnouncementBody = {
       title: anouncementTitle,
       content: anouncementContent,
       id: announcement.id,
     };
 
-    const data = updateAnnouncement.mutate(newAnnouncement);
-    console.log(data);
-    if (true) {
-      toast.success(`${anouncementTitle} has been edited!`);
-    } else {
-      toast.error(`An error has occured please try again later!`);
-    }
+    updateAnnouncement.mutate(updatedAnnouncementBody);
 
     editAnnouncementFunc(announcement, false);
     reload();

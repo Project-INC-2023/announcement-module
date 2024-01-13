@@ -4,22 +4,15 @@ import { api } from "@/trpc/react";
 import {
   Announcement,
   EditAnnouncementFromAdminPageProps,
-  EditAnnouncementProps,
 } from "@/types/announcement";
-import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { toast } from "sonner";
 
 export const AdminViewAnnouncements: React.FC<
   EditAnnouncementFromAdminPageProps
 > = ({ editAnnouncementFunc }) => {
-  const {
-    data: announcements = [],
-    error: allAnnouncementsError,
-    refetch: reload,
-  } = api.an.getAllAnnouncements.useQuery();
+  const { data: announcements = [], refetch: reload } =
+    api.an.getAllAnnouncements.useQuery();
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
 

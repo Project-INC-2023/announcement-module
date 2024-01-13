@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api } from "@/trpc/react";
+import { useState } from "react";
 import { Announcement } from "@/types/announcement";
 import Link from "next/link";
 import { CreateAnnouncement } from "@/app/_components/create-announcement";
@@ -19,7 +18,6 @@ export const AdminPage: React.FC = () => {
       ...prevAnnouncements,
     ]);
   };
-  const getAllAnnouncements = api.an.getAllAnnouncements;
 
   const handleEditAnnouncement = (
     announcement: Announcement,
