@@ -67,5 +67,12 @@ export const announcementRouter = createTRPCRouter({
 
   getSpecificAnnouncement: publicProcedure
     .input(z.string())
-    .mutation(async ({ ctx, input }) => {}),
+    .query(async ({ ctx, input }) => {
+      const specificAnnouncement = await ctx.db.announcement.findUnique({
+        where: {
+          id: input,
+        },
+      });
+      return specificAnnouncement;
+    }),
 });

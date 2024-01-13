@@ -1,19 +1,46 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Announcement, EditAnnouncementProps } from "@/types/announcement";
-import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { EditAnnouncementProps } from "@/types/announcement";
+
+import { useState } from "react";
+import { toast } from "sonner";
 
 export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
-  editAnnouncement,
+  editAnnouncementFunc,
+  announcement,
 }) => {
-  const { data: announcements = [], error: allAnnouncementsError } =
-    api.an.getAllAnnouncements.useQuery();
-  const updateAnnouncement = api.an.updateAnnouncement.useMutation();
+  const [anouncementTitle, setAnnouncementTitle] = useState<string>(
+    announcement.title,
+  );
+  const [anouncementContent, setAnnouncementContent] = useState<string>(
+    announcement.content,
+  );
+  const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
+  const updateAnnouncement = api.an.updateAnnouncement.useMutation({
+    onSuccess: () => {
+      toast.success(`${anouncementTitle} has been edited!`);
+    },
+    onError: (error) => {
+      toast.error(`Update unsuccessful due to ${error.data?.code}`);
+    },
+  });
+
   const closeEditAnnouncement = () => {
-    editAnnouncement("lol", false);
+    editAnnouncementFunc(announcement, false);
+  };
+
+  const saveEditAnnouncement = () => {
+    const updatedAnnouncementBody = {
+      title: anouncementTitle,
+      content: anouncementContent,
+      id: announcement.id,
+    };
+
+    updateAnnouncement.mutate(updatedAnnouncementBody);
+
+    editAnnouncementFunc(announcement, false);
+    reload();
   };
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
@@ -28,11 +55,30 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
             Close
           </button>
         </div>
-        <h2 className=" text-2xl font-semibold">Edit Announcement</h2>
-        <p>hello</p>
-      </div>
+        <div className="flex flex-col items-center">
+          <input
+            value={anouncementTitle}
+            onChange={(e) => {
+              setAnnouncementTitle(e.target.value);
+            }}
+          />
 
-      <ul className=""></ul>
+          <input
+            value={anouncementContent}
+            onChange={(e) => {
+              setAnnouncementContent(e.target.value);
+            }}
+          />
+        </div>
+        <button
+          onClick={() => {
+            saveEditAnnouncement();
+          }}
+          className="mt-10 border-2 border-black px-2"
+        >
+          Save
+        </button>
+      </div>
     </div>
   );
 };

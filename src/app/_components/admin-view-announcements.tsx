@@ -1,21 +1,18 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Announcement, EditAnnouncementProps } from "@/types/announcement";
-import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Announcement,
+  EditAnnouncementFromAdminPageProps,
+} from "@/types/announcement";
 
 import { toast } from "sonner";
 
-export const AdminViewAnnouncements: React.FC<EditAnnouncementProps> = ({
-  editAnnouncement,
-}) => {
-  const {
-    data: announcements = [],
-    error: allAnnouncementsError,
-    refetch: nuggets,
-  } = api.an.getAllAnnouncements.useQuery();
+export const AdminViewAnnouncements: React.FC<
+  EditAnnouncementFromAdminPageProps
+> = ({ editAnnouncementFunc }) => {
+  const { data: announcements = [], refetch: reload } =
+    api.an.getAllAnnouncements.useQuery();
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
 
@@ -33,7 +30,7 @@ export const AdminViewAnnouncements: React.FC<EditAnnouncementProps> = ({
                     toast.promise(deleteFunction.mutateAsync(announcement.id), {
                       loading: "Deleting...",
                       success: () => {
-                        nuggets();
+                        reload();
                         return "Deleted!";
                       },
                       error: "Something went wrong!",
@@ -46,7 +43,7 @@ export const AdminViewAnnouncements: React.FC<EditAnnouncementProps> = ({
               <div className="w-1/2">
                 <button
                   onClick={() => {
-                    editAnnouncement(announcement.id, true);
+                    editAnnouncementFunc(announcement, true);
                   }}
                   className=" border-2 border-black px-2"
                 >

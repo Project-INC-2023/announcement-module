@@ -5,7 +5,6 @@ import { api } from "@/trpc/react";
 import { CreateAnnouncementProps } from "@/types/announcement";
 
 import { toast } from "sonner";
-import Link from "next/link";
 
 export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
   announcementCreated,

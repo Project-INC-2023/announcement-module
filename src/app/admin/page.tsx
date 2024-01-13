@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { api } from "@/trpc/react";
+import { useState } from "react";
 import { Announcement } from "@/types/announcement";
 import Link from "next/link";
 import { CreateAnnouncement } from "@/app/_components/create-announcement";
@@ -11,7 +10,7 @@ import { EditAnnouncement } from "../_components/edit-announcement";
 export const AdminPage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [openEdit, setOpenEdit] = useState<Boolean>(false);
-  const [editAnnouncementID, setEditAnnouncementID] = useState<String>();
+  const [editAnnouncement, setEditAnnouncement] = useState<Announcement>();
 
   const handleAnnouncementCreated = (newAnnouncement: Announcement) => {
     setAnnouncements((prevAnnouncements) => [
@@ -20,15 +19,21 @@ export const AdminPage: React.FC = () => {
     ]);
   };
 
-  const handleEditAnnouncement = (id: String, open: Boolean) => {
+  const handleEditAnnouncement = (
+    announcement: Announcement,
+    open: boolean,
+  ) => {
+    setEditAnnouncement(announcement);
     setOpenEdit(open);
-    setEditAnnouncementID(id);
   };
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       {openEdit ? (
-        <EditAnnouncement editAnnouncement={handleEditAnnouncement} />
+        <EditAnnouncement
+          announcement={editAnnouncement!}
+          editAnnouncementFunc={handleEditAnnouncement}
+        />
       ) : (
         <div></div>
       )}
@@ -50,7 +55,9 @@ export const AdminPage: React.FC = () => {
           <CreateAnnouncement announcementCreated={handleAnnouncementCreated} />
         </div>
         <div className="w-1/2">
-          <AdminViewAnnouncements editAnnouncement={handleEditAnnouncement} />
+          <AdminViewAnnouncements
+            editAnnouncementFunc={handleEditAnnouncement}
+          />
         </div>
       </div>
     </div>
