@@ -8,13 +8,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
   editAnnouncement,
+  announcementId,
 }) => {
-  const { data: announcements = [], error: allAnnouncementsError } =
-    api.an.getAllAnnouncements.useQuery();
+  const { data: specifcAnnouncementData, isLoading: loading } =
+    api.an.getSpecificAnnouncement.useQuery(announcementId);
+
   const updateAnnouncement = api.an.updateAnnouncement.useMutation();
   const closeEditAnnouncement = () => {
-    editAnnouncement("lol", false);
+    editAnnouncement(announcementId, false);
   };
+  const saveEditAnnouncement = () => {};
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
       <div className="h-1/4 w-1/3 rounded-md bg-white p-6">
@@ -28,8 +31,25 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
             Close
           </button>
         </div>
-        <h2 className=" text-2xl font-semibold">Edit Announcement</h2>
-        <p>hello</p>
+        {loading ? (
+          <div>Loading...</div>
+        ) : (
+          <div>
+            <input />
+            <h2 className=" text-2xl font-semibold">
+              {specifcAnnouncementData?.title}
+            </h2>
+            <p>{specifcAnnouncementData?.content}</p>
+            <button
+              onClick={() => {
+                saveEditAnnouncement();
+              }}
+              className="mt-10 border-2 border-black px-2"
+            >
+              Save
+            </button>
+          </div>
+        )}
       </div>
 
       <ul className=""></ul>

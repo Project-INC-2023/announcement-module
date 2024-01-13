@@ -1,16 +1,20 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Announcement, EditAnnouncementProps } from "@/types/announcement";
+import {
+  Announcement,
+  EditAnnouncementFromAdminPageProps,
+  EditAnnouncementProps,
+} from "@/types/announcement";
 import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { toast } from "sonner";
 
-export const AdminViewAnnouncements: React.FC<EditAnnouncementProps> = ({
-  editAnnouncement,
-}) => {
+export const AdminViewAnnouncements: React.FC<
+  EditAnnouncementFromAdminPageProps
+> = ({ editAnnouncement }) => {
   const {
     data: announcements = [],
     error: allAnnouncementsError,

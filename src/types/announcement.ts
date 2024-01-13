@@ -9,5 +9,10 @@ export interface CreateAnnouncementProps {
 }
 
 export interface EditAnnouncementProps {
-  editAnnouncement: (id: String, open: Boolean) => void;
+  editAnnouncement: (id: string, open: boolean) => void;
+  announcementId: string;
+}
+
+export interface EditAnnouncementFromAdminPageProps {
+  editAnnouncement: (id: string, open: boolean) => void;
 }

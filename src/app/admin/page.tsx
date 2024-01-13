@@ -11,7 +11,7 @@ import { EditAnnouncement } from "../_components/edit-announcement";
 export const AdminPage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [openEdit, setOpenEdit] = useState<Boolean>(false);
-  const [editAnnouncementID, setEditAnnouncementID] = useState<String>();
+  const [editAnnouncementID, setEditAnnouncementID] = useState<string>("");
 
   const handleAnnouncementCreated = (newAnnouncement: Announcement) => {
     setAnnouncements((prevAnnouncements) => [
@@ -20,15 +20,18 @@ export const AdminPage: React.FC = () => {
     ]);
   };
 
-  const handleEditAnnouncement = (id: String, open: Boolean) => {
-    setOpenEdit(open);
+  const handleEditAnnouncement = (id: string, open: boolean) => {
     setEditAnnouncementID(id);
+    setOpenEdit(open);
   };
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       {openEdit ? (
-        <EditAnnouncement editAnnouncement={handleEditAnnouncement} />
+        <EditAnnouncement
+          announcementId={editAnnouncementID}
+          editAnnouncement={handleEditAnnouncement}
+        />
       ) : (
         <div></div>
       )}
