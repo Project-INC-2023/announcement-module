@@ -76,7 +76,7 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
           }}
           className="mt-10 border-2 border-black px-2"
         >
-          Save
+          Save Edit
         </button>
       </div>
     </div>
