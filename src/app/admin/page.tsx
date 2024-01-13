@@ -11,7 +11,7 @@ import { EditAnnouncement } from "../_components/edit-announcement";
 export const AdminPage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [openEdit, setOpenEdit] = useState<Boolean>(false);
-  const [editAnnouncementID, setEditAnnouncementID] = useState<string>("");
+  const [editAnnouncement, setEditAnnouncement] = useState<Announcement>();
 
   const handleAnnouncementCreated = (newAnnouncement: Announcement) => {
     setAnnouncements((prevAnnouncements) => [
@@ -20,8 +20,11 @@ export const AdminPage: React.FC = () => {
     ]);
   };
 
-  const handleEditAnnouncement = (id: string, open: boolean) => {
-    setEditAnnouncementID(id);
+  const handleEditAnnouncement = (
+    announcement: Announcement,
+    open: boolean,
+  ) => {
+    setEditAnnouncement(announcement);
     setOpenEdit(open);
   };
 
@@ -29,8 +32,8 @@ export const AdminPage: React.FC = () => {
     <div className="max-w mx-auto max-h-screen text-center">
       {openEdit ? (
         <EditAnnouncement
-          announcementId={editAnnouncementID}
-          editAnnouncement={handleEditAnnouncement}
+          announcement={editAnnouncement!}
+          editAnnouncementFunc={handleEditAnnouncement}
         />
       ) : (
         <div></div>
@@ -53,7 +56,9 @@ export const AdminPage: React.FC = () => {
           <CreateAnnouncement announcementCreated={handleAnnouncementCreated} />
         </div>
         <div className="w-1/2">
-          <AdminViewAnnouncements editAnnouncement={handleEditAnnouncement} />
+          <AdminViewAnnouncements
+            editAnnouncementFunc={handleEditAnnouncement}
+          />
         </div>
       </div>
     </div>

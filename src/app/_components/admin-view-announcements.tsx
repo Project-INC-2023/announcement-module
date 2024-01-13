@@ -14,11 +14,11 @@ import { toast } from "sonner";
 
 export const AdminViewAnnouncements: React.FC<
   EditAnnouncementFromAdminPageProps
-> = ({ editAnnouncement }) => {
+> = ({ editAnnouncementFunc }) => {
   const {
     data: announcements = [],
     error: allAnnouncementsError,
-    refetch: nuggets,
+    refetch: reload,
   } = api.an.getAllAnnouncements.useQuery();
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
@@ -37,7 +37,7 @@ export const AdminViewAnnouncements: React.FC<
                     toast.promise(deleteFunction.mutateAsync(announcement.id), {
                       loading: "Deleting...",
                       success: () => {
-                        nuggets();
+                        reload();
                         return "Deleted!";
                       },
                       error: "Something went wrong!",
@@ -50,7 +50,7 @@ export const AdminViewAnnouncements: React.FC<
               <div className="w-1/2">
                 <button
                   onClick={() => {
-                    editAnnouncement(announcement.id, true);
+                    editAnnouncementFunc(announcement, true);
                   }}
                   className=" border-2 border-black px-2"
                 >
