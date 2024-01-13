@@ -19,6 +19,7 @@ export const AdminPage: React.FC = () => {
       ...prevAnnouncements,
     ]);
   };
+  const getAllAnnouncements = api.an.getAllAnnouncements;
 
   const handleEditAnnouncement = (
     announcement: Announcement,

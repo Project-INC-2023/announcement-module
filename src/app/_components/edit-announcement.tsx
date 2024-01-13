@@ -6,6 +6,7 @@ import { faFontAwesome } from "@fortawesome/free-regular-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
   editAnnouncementFunc,
@@ -32,7 +33,15 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
       content: anouncementContent,
       id: announcement.id,
     };
-    updateAnnouncement.mutate(newAnnouncement);
+
+    const data = updateAnnouncement.mutate(newAnnouncement);
+    console.log(data);
+    if (true) {
+      toast.success(`${anouncementTitle} has been edited!`);
+    } else {
+      toast.error(`An error has occured please try again later!`);
+    }
+
     editAnnouncementFunc(announcement, false);
     reload();
   };
