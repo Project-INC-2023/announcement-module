@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Announcement } from "@/types/announcement";
 import Link from "next/link";
-import { AdminViewAnnouncements } from "../_components/admin-view-announcements";
-import { EditAnnouncement } from "../_components/edit-announcement";
+import { AdminViewAnnouncements } from "../../_components/admin-view-announcements";
+import { EditAnnouncement } from "../../_components/edit-announcement";
 
 export const AdminPage: React.FC = () => {
   const [openEdit, setOpenEdit] = useState<Boolean>(false);
@@ -37,15 +37,21 @@ export const AdminPage: React.FC = () => {
             Back to the labs
           </Link>
         </div>
-        
+
         <h2 className="w-1/2 text-xl font-semibold">Admin page</h2>
 
-        <div className="w-1/4 ">
-          <Link 
-            href="/admin-create"
-            className=" h-9  rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+        <div className="flex w-1/4 justify-end gap-3 pr-10">
+          <Link
+            href="create"
+            className=" rounded border-2 border-green-500 px-4  py-2  font-bold text-green-500 hover:bg-green-700"
           >
-            To admin-create announcement
+            Create
+          </Link>
+          <Link
+            href="create"
+            className=" rounded border-2 border-green-500 px-4  py-2  font-bold text-green-500 hover:bg-green-700"
+          >
+            Edit
           </Link>
         </div>
       </div>
