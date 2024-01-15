@@ -8,9 +8,7 @@ import {
 
 import { toast } from "sonner";
 
-export const AdminViewAnnouncements: React.FC<
-  EditAnnouncementFromAdminPageProps
-> = ({ editAnnouncementFunc }) => {
+export const AdminViewAnnouncements: React.FC<EditAnnouncementFromAdminPageProps> = ({ editAnnouncementFunc }) => {
   const { data: announcements = [], refetch: reload } =
     api.an.getAllAnnouncements.useQuery();
 
