@@ -1,14 +1,12 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import {
-  Announcement,
-  EditAnnouncementFromAdminPageProps,
-} from "@/types/announcement";
+import { Announcement } from "@/types/announcement";
+import Link from "next/link";
 
 import { toast } from "sonner";
 
-export const AdminViewAnnouncements: React.FC<EditAnnouncementFromAdminPageProps> = ({ editAnnouncementFunc }) => {
+export const AdminViewAnnouncements: React.FC = ({}) => {
   const { data: announcements = [], refetch: reload } =
     api.an.getAllAnnouncements.useQuery();
 
@@ -39,14 +37,12 @@ export const AdminViewAnnouncements: React.FC<EditAnnouncementFromAdminPageProps
                 </button>
               </div>
               <div className="w-1/2">
-                <button
-                  onClick={() => {
-                    editAnnouncementFunc(announcement, true);
-                  }}
-                  className=" border-2 border-black px-2"
+                <Link
+                  className="border-2 border-black px-2"
+                  href={`edit/${announcement.id}`}
                 >
                   Edit
-                </button>
+                </Link>
               </div>
             </div>
             <h3 className="text-lg font-bold">{announcement.title}</h3>

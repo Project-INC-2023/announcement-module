@@ -7,7 +7,6 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
-  editAnnouncementFunc,
   announcement,
 }) => {
   const [anouncementTitle, setAnnouncementTitle] = useState<string>(
@@ -26,10 +25,6 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
     },
   });
 
-  const closeEditAnnouncement = () => {
-    editAnnouncementFunc(announcement, false);
-  };
-
   const saveEditAnnouncement = () => {
     const updatedAnnouncementBody = {
       title: anouncementTitle,
@@ -39,45 +34,39 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
 
     updateAnnouncement.mutate(updatedAnnouncementBody);
 
-    editAnnouncementFunc(announcement, false);
     reload();
   };
   return (
-    <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50">
-      <div className="h-1/4 w-1/3 rounded-md bg-white p-6">
-        <div className="flex justify-end">
-          <button
-            onClick={() => {
-              closeEditAnnouncement();
-            }}
-            className="border-2 border-black px-2"
-          >
-            Close
-          </button>
-        </div>
-        <div className="flex flex-col items-center">
-          <input
-            value={anouncementTitle}
-            onChange={(e) => {
-              setAnnouncementTitle(e.target.value);
-            }}
-          />
+    <div className="flex h-full flex-col">
+      <div className="flex flex-grow items-center justify-center">
+        <div className="w-full max-w-md rounded-lg bg-gray-100 p-6">
+          <h1 className="mb-4 text-center text-2xl font-bold">
+            Edit Announcement
+          </h1>
 
           <input
-            value={anouncementContent}
-            onChange={(e) => {
-              setAnnouncementContent(e.target.value);
-            }}
+            type="text"
+            placeholder="Title"
+            value={anouncementTitle}
+            onChange={(e) => setAnnouncementTitle(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
+          <textarea
+            placeholder="Content"
+            value={anouncementContent}
+            onChange={(e) => setAnnouncementContent(e.target.value)}
+            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
+            rows={4}
+          ></textarea>
+          <button
+            className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
+            onClick={() => {
+              saveEditAnnouncement();
+            }}
+          >
+            Edit
+          </button>
         </div>
-        <button
-          onClick={() => {
-            saveEditAnnouncement();
-          }}
-          className="mt-10 border-2 border-black px-2"
-        >
-          Save Edit
-        </button>
       </div>
     </div>
   );

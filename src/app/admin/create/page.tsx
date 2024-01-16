@@ -4,8 +4,6 @@ import { useState } from "react";
 import { Announcement } from "@/types/announcement";
 import Link from "next/link";
 import { CreateAnnouncement } from "@/app/_components/create-announcement";
-import { AdminViewAnnouncements } from "../../_components/admin-view-announcements";
-import { EditAnnouncement } from "../../_components/edit-announcement";
 
 export const AdminCreatePage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -18,14 +16,6 @@ export const AdminCreatePage: React.FC = () => {
       ...prevAnnouncements,
     ]);
   };
-
-  // const handleEditAnnouncement = (
-  //   announcement: Announcement,
-  //   open: boolean,
-  // ) => {
-  //   setEditAnnouncement(announcement);
-  //   setOpenEdit(open);
-  // };
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">

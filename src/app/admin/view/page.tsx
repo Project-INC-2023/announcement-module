@@ -4,30 +4,10 @@ import { useState } from "react";
 import { Announcement } from "@/types/announcement";
 import Link from "next/link";
 import { AdminViewAnnouncements } from "../../_components/admin-view-announcements";
-import { EditAnnouncement } from "../../_components/edit-announcement";
 
 export const AdminPage: React.FC = () => {
-  const [openEdit, setOpenEdit] = useState<Boolean>(false);
-  const [editAnnouncement, setEditAnnouncement] = useState<Announcement>();
-
-  const handleEditAnnouncement = (
-    announcement: Announcement,
-    open: boolean,
-  ) => {
-    setEditAnnouncement(announcement);
-    setOpenEdit(open);
-  };
-
   return (
     <div className="max-w mx-auto max-h-screen text-center">
-      {openEdit ? (
-        <EditAnnouncement
-          announcement={editAnnouncement!}
-          editAnnouncementFunc={handleEditAnnouncement}
-        />
-      ) : (
-        <div></div>
-      )}
       <div className=" flex items-center justify-start bg-gray-200 py-4">
         <div className="w-1/4">
           <Link
@@ -47,20 +27,12 @@ export const AdminPage: React.FC = () => {
           >
             Create
           </Link>
-          <Link
-            href="create"
-            className=" rounded border-2 border-green-500 px-4  py-2  font-bold text-green-500 hover:bg-green-700"
-          >
-            Edit
-          </Link>
         </div>
       </div>
 
       <div className="flex">
         <div className="w-full">
-          <AdminViewAnnouncements
-            editAnnouncementFunc={handleEditAnnouncement}
-          />
+          <AdminViewAnnouncements />
         </div>
       </div>
     </div>
