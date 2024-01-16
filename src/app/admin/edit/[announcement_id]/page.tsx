@@ -1,7 +1,4 @@
 "use client";
-
-import { useState } from "react";
-import { Announcement, EditAnnouncementPageProps } from "@/types/announcement";
 import { api } from "@/trpc/react";
 
 import { useParams, useRouter } from "next/navigation";
@@ -12,10 +9,9 @@ export const AdminEdit: React.FC = ({}) => {
   const { announcement_id } = useParams();
   const getSpecificAnnouncement = api.an.getSpecificAnnouncement;
 
-  const [editAnnouncement, setEditAnnouncement] = useState<Announcement>();
-
   if (announcement_id == undefined || Array.isArray(announcement_id)) {
-    console.log("1");
+    const router = useRouter();
+    router.back();
     return;
   }
   const { data: announcement_raw_data } =

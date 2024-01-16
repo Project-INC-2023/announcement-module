@@ -4,8 +4,7 @@ import { api } from "@/trpc/react";
 import { Announcement } from "@/types/announcement";
 
 export const ViewAnnouncements: React.FC = () => {
-  const { data: announcements = [], error: allAnnouncementsError } =
-    api.an.getAllAnnouncements.useQuery();
+  const { data: announcements = [] } = api.an.getAllAnnouncements.useQuery();
 
   return (
     <div className="mx-auto max-w-md pt-12 text-center">

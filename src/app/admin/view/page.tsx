@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Announcement } from "@/types/announcement";
 import Link from "next/link";
-import { AdminViewAnnouncements } from "../../_components/admin-view-announcements";
+import { AdminViewAnnouncements } from "@/app/_components/admin-view-announcements";
 
 export const AdminPage: React.FC = () => {
   return (

@@ -7,8 +7,6 @@ import { CreateAnnouncement } from "@/app/_components/create-announcement";
 
 export const AdminCreatePage: React.FC = () => {
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
-  const [openEdit, setOpenEdit] = useState<Boolean>(false);
-  const [editAnnouncement, setEditAnnouncement] = useState<Announcement>();
 
   const handleAnnouncementCreated = (newAnnouncement: Announcement) => {
     setAnnouncements((prevAnnouncements) => [
