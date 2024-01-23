@@ -1,6 +1,6 @@
 # Announcement-Module Research Project
 
-## Version 1.2
+## Version 1.3
 
 ### This research project is done by Han Ming and Jerald.
 
