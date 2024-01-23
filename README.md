@@ -6,7 +6,7 @@
 
 This code was done with the worst practices in place to be used to compare with other versions to teach the importance of having standard when it comes to working with a team and coding practices
 
-Version 1.2 Fact Sheet
+Version 1.3 Fact Sheet
 
 | Property       | Remarks                                                                                                  |
 | -------------- | -------------------------------------------------------------------------------------------------------- |
