@@ -1,9 +1,9 @@
 "use client";
 
+import type { Announcement } from "@prisma/client";
 import { api } from "@/trpc/react";
-import { Announcement } from "@/types/announcement";
 
-export const ViewAnnouncements: React.FC = () => {
+const ViewAnnouncements: React.FC = () => {
   const { data: announcements = [] } = api.an.getAllAnnouncements.useQuery();
 
   return (
@@ -20,3 +20,5 @@ export const ViewAnnouncements: React.FC = () => {
     </div>
   );
 };
+
+export default ViewAnnouncements;

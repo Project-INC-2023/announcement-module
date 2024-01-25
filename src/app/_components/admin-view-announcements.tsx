@@ -1,12 +1,15 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { Announcement } from "@/types/announcement";
 import Link from "next/link";
 
 import { toast } from "sonner";
 
-export const AdminViewAnnouncements: React.FC = ({}) => {
+import type { Announcement } from "@prisma/client"; // changed all types to prisma types
+
+import { api } from "@/trpc/react";
+// import { Announcement } from "@/types/announcement";
+
+const AdminViewAnnouncements: React.FC = () => {
   const { data: announcements = [], refetch: reload } =
     api.an.getAllAnnouncements.useQuery();
 
@@ -21,12 +24,13 @@ export const AdminViewAnnouncements: React.FC = ({}) => {
             <div className="flex justify-center gap-10">
               <div className="w-1/2 text-red-500">
                 <button
+                  type="button"
                   className=" border-2 border-red-500 px-2"
                   onClick={() => {
                     toast.promise(deleteFunction.mutateAsync(announcement.id), {
                       loading: "Deleting...",
                       success: () => {
-                        reload();
+                        void reload(); // need check if this is the correct way of resolving eslint@typescript-eslint/no-floating-promises
                         return "Deleted!";
                       },
                       error: "Something went wrong!",
@@ -53,3 +57,5 @@ export const AdminViewAnnouncements: React.FC = ({}) => {
     </div>
   );
 };
+
+export default AdminViewAnnouncements;

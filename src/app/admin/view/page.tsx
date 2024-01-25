@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { AdminViewAnnouncements } from "@/app/_components/admin-view-announcements";
+import AdminViewAnnouncements from "@/app/_components/admin-view-announcements";
 
-export const AdminPage: React.FC = () => {
+const AdminPage: React.FC = () => {
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       <div className=" flex items-center justify-start bg-gray-200 py-4">

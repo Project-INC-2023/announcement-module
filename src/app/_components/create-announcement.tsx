@@ -1,20 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/trpc/react";
-import { CreateAnnouncementProps } from "@/types/announcement";
-
 import { toast } from "sonner";
 
-export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
-  announcementCreated,
-}) => {
+import { useState } from "react";
+import { api } from "@/trpc/react";
+// import { CreateAnnouncementProps } from "@/types/announcement";
+
+// removed prop CreateAnnouncementProps as its not needed
+
+const CreateAnnouncement: React.FC = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
-      announcementCreated(newAnnouncement);
       toast.success(`${newAnnouncement.title} announcement has been added`);
     },
     onError: (error) => {
@@ -63,7 +62,7 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
               onChange={(e) => setContent(e.target.value)}
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
               rows={4}
-            ></textarea>
+            />
             <button
               type="submit"
               className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
@@ -77,3 +76,5 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
     </div>
   );
 };
+
+export default CreateAnnouncement;

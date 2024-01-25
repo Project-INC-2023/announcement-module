@@ -6,7 +6,6 @@ import { EditAnnouncementProps } from "@/types/announcement";
 import { useState } from "react";
 import { toast } from "sonner";
 
-
 export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
   announcement,
 }) => {

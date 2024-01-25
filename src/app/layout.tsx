@@ -3,9 +3,9 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
+import { Toaster } from 'sonner';
 import { TRPCReactProvider } from "@/trpc/react";
 
-import { Toaster } from 'sonner';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -18,6 +18,7 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+// eslint-disable-next-line react/function-component-definition
 export default function RootLayout({
   children,
 }: {
