@@ -7,10 +7,13 @@ import { api } from "@/trpc/react";
 // import { CreateAnnouncementProps } from "@/types/announcement";
 
 // removed prop CreateAnnouncementProps as its not needed
+// changed to using objects to manage all states
 
 const CreateAnnouncement: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [announcementData, setAnnouncementData] = useState({
+    title: "",
+    content: ""
+  })
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
@@ -21,21 +24,31 @@ const CreateAnnouncement: React.FC = () => {
     },
   });
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setAnnouncementData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!title || !content) {
+    if (!announcementData.title || !announcementData.content) {
       toast.error("Please fill in both title and content.");
       return;
     }
 
     try {
       createAnnouncement.mutate({
-        title,
-        content,
+        title: announcementData.title,
+        content: announcementData.content,
       });
-      setTitle("");
-      setContent("");
+      setAnnouncementData({
+        title: "",
+        content: ""
+      });
     } catch (error) {
       toast.error(`Error creating announcement: ${(error as Error).message}`);
     }
@@ -51,15 +64,17 @@ const CreateAnnouncement: React.FC = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"
+              name="title"
               placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              value={announcementData.title}
+              onChange={handleInputChange}
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
             />
             <textarea
+            name="content"
               placeholder="Content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
+              value={announcementData.content}
+              onChange={handleInputChange}
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
               rows={4}
             />

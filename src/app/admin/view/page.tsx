@@ -1,5 +1,6 @@
 "use client";
 
+// prob dont need use client here
 import Link from "next/link";
 import AdminViewAnnouncements from "@/app/_components/admin-view-announcements";
 

@@ -1,9 +1,8 @@
-"use client";
-
 import Link from "next/link";
 import ViewAnnouncements from "./_components/view-announcements";
 import LoginPage from "./_components/login";
 
+// removed "use client" here as it is a server component now
 const Home = () => (
   <div className="relative">
     <div className="absolute right-0 top-0 mr-4 mt-4 flex justify-end">
