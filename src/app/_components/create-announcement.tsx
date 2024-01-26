@@ -1,7 +1,5 @@
 "use client";
 
-import { toast } from "sonner";
-
 import { useState } from "react";
 import { api } from "@/trpc/react";
 // import { CreateAnnouncementProps } from "@/types/announcement";
@@ -9,18 +7,21 @@ import { api } from "@/trpc/react";
 // removed prop CreateAnnouncementProps as its not needed
 // changed to using objects to manage all states
 // could take out React.FC
+// changed success/error messages to a normal div instead of a toast
 const CreateAnnouncement: React.FC = () => {
   const [announcementData, setAnnouncementData] = useState({
     title: "",
     content: ""
   })
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
-      toast.success(`${newAnnouncement.title} announcement has been added`);
+      setErrorMessage(`${newAnnouncement.title} announcement has been added`);
     },
     onError: (error) => {
-      toast.error(`Error creating announcement: ${error.message}`);
+      setErrorMessage(`Error creating announcement: ${error.message}`);
     },
   });
 
@@ -35,10 +36,10 @@ const CreateAnnouncement: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!announcementData.title || !announcementData.content) {
-      toast.error("Please fill in both title and content.");
-      return;
-    }
+      if (!announcementData.title || !announcementData.content) {
+        setErrorMessage("Error: Please fill in both title and content.");
+        return;
+      }
 
     try {
       createAnnouncement.mutate({
@@ -50,7 +51,7 @@ const CreateAnnouncement: React.FC = () => {
         content: ""
       });
     } catch (error) {
-      toast.error(`Error creating announcement: ${(error as Error).message}`);
+      setErrorMessage(`Error creating announcement: ${(error as Error).message}`);
     }
   };
 
@@ -61,6 +62,13 @@ const CreateAnnouncement: React.FC = () => {
           <h1 className="mb-4 text-center text-2xl font-bold">
             Create Announcement
           </h1>
+
+          {errorMessage && (
+            <div className={`mb-4 ${errorMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+              {errorMessage}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               type="text"

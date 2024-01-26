@@ -10,8 +10,7 @@ import { api } from "@/trpc/react";
 // import { Announcement } from "@/types/announcement";
 
 const AdminViewAnnouncements: React.FC = () => {
-  const { data: announcements = [], refetch: reload } =
-    api.an.getAllAnnouncements.useQuery();
+  const { data: announcements = [], refetch: reload } = api.an.getAllAnnouncements.useQuery();
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
 
