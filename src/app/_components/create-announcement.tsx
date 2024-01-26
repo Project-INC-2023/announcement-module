@@ -8,7 +8,7 @@ import { api } from "@/trpc/react";
 
 // removed prop CreateAnnouncementProps as its not needed
 // changed to using objects to manage all states
-
+// could take out React.FC
 const CreateAnnouncement: React.FC = () => {
   const [announcementData, setAnnouncementData] = useState({
     title: "",

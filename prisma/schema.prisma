@@ -14,5 +14,8 @@ model Announcement {
   id        String      @id @default(uuid())
   title     String
   content   String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now() )
 }
+
+
+//@db.timestamptz(3) number inside the bracket is for precision, 3 for milliseconds 6 for microseconds

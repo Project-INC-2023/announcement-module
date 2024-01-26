@@ -3,6 +3,7 @@
 // prob dont need use client here
 import Link from "next/link";
 import AdminViewAnnouncements from "@/app/_components/admin-view-announcements";
+// find out whether React.FC should be used since its prob discouraged now
 
 const AdminPage: React.FC = () => {
   return (

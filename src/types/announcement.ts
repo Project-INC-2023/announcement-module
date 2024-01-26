@@ -1,4 +1,6 @@
-export interface Announcement {
+// file to be removed
+
+export interface Announcement { 
   id: string;
   title: string;
   content: string;
