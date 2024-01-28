@@ -1,22 +1,21 @@
 "use client";
 
-import { api } from "@/trpc/react";
-
-import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
+import { api } from "@/trpc/react";
 import { EditAnnouncement } from "@/app/_components/edit-announcement";
 
-export const AdminEdit: React.FC = ({}) => {
-  const { announcement_id } = useParams();
-  const getSpecificAnnouncement = api.an.getSpecificAnnouncement;
+const AdminEdit: React.FC = () => {
+  const router = useRouter();
+  const { announcementId } = useParams();
+  const { getSpecificAnnouncement } = api.an;
 
-  if (announcement_id == undefined || Array.isArray(announcement_id)) {
-    const router = useRouter();
+  if (announcementId === undefined || Array.isArray(announcementId)) {
     router.back();
-    return;
+    return null;
   }
-  const { data: announcement_raw_data } =
-    getSpecificAnnouncement.useQuery(announcement_id);
+  const { data: announcementRawData } =
+    getSpecificAnnouncement.useQuery(announcementId);
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">
@@ -35,17 +34,16 @@ export const AdminEdit: React.FC = ({}) => {
 
       <div className="flex">
         <div className="w-full items-center pt-40">
-          {announcement_raw_data == undefined ||
-          announcement_raw_data.content == undefined ||
-          announcement_raw_data.title == undefined ||
-          announcement_raw_data.id == undefined ? (
+          {announcementRawData?.content === undefined ||
+          announcementRawData.title === undefined ||
+          announcementRawData.id === undefined ? (
             <div>Loading ...</div>
           ) : (
             <EditAnnouncement
               announcement={{
-                id: announcement_raw_data.id,
-                title: announcement_raw_data.title,
-                content: announcement_raw_data.content,
+                id: announcementRawData.id,
+                title: announcementRawData.title,
+                content: announcementRawData.content,
               }}
             />
           )}
