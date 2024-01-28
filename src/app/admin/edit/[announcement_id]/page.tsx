@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
-import { EditAnnouncement } from "@/app/_components/edit-announcement";
+import EditAnnouncement from "@/app/_components/edit-announcement";
 
 const AdminEdit: React.FC = () => {
   const router = useRouter();
@@ -40,11 +40,10 @@ const AdminEdit: React.FC = () => {
             <div>Loading ...</div>
           ) : (
             <EditAnnouncement
-              announcement={{
-                id: announcementRawData.id,
-                title: announcementRawData.title,
-                content: announcementRawData.content,
-              }}
+              id={announcementRawData.id}
+              title={announcementRawData.title}
+              content={announcementRawData.content}
+              createdAt={announcementRawData.createdAt}
             />
           )}
         </div>

@@ -1,20 +1,16 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { EditAnnouncementProps } from "@/types/announcement";
-
+import type { Announcement } from "@prisma/client";
 import { useState } from "react";
 import { toast } from "sonner";
+import { api } from "@/trpc/react";
 
-export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
-  announcement,
-}) => {
-  const [anouncementTitle, setAnnouncementTitle] = useState<string>(
-    announcement.title,
-  );
-  const [anouncementContent, setAnnouncementContent] = useState<string>(
-    announcement.content,
-  );
+const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
+  const [anouncementTitle, setAnnouncementTitle] = useState<string>(title);
+  const [anouncementContent, setAnnouncementContent] =
+    useState<string>(content);
+  const [announcementId] = useState<string>(id);
+
   const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
   const updateAnnouncement = api.an.updateAnnouncement.useMutation({
     onSuccess: () => {
@@ -29,12 +25,12 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
     const updatedAnnouncementBody = {
       title: anouncementTitle,
       content: anouncementContent,
-      id: announcement.id,
+      id: announcementId,
     };
 
     updateAnnouncement.mutate(updatedAnnouncementBody);
 
-    reload();
+    void reload();
   };
   return (
     <div className="flex h-full flex-col">
@@ -57,8 +53,9 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
             onChange={(e) => setAnnouncementContent(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
             rows={4}
-          ></textarea>
+          />
           <button
+            type="button"
             className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
             onClick={() => {
               saveEditAnnouncement();
@@ -71,3 +68,5 @@ export const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
     </div>
   );
 };
+
+export default EditAnnouncement;
