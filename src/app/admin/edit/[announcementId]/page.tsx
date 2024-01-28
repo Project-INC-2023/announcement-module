@@ -7,10 +7,10 @@ import EditAnnouncement from "@/app/_components/edit-announcement";
 
 const AdminEdit: React.FC = () => {
   const router = useRouter();
-  const { announcementId } = useParams();
+  const { announcementId } = useParams<{ announcementId: string }>();
   const { getSpecificAnnouncement } = api.an;
 
-  if (announcementId === undefined || Array.isArray(announcementId)) {
+  if (announcementId === undefined) {
     router.back();
     return null;
   }
