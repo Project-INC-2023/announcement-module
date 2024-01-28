@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ViewAnnouncements from "./_components/view-announcements";
-import LoginPage from "./_components/login";
 
 // removed "use client" here as it is a server component now
 const Home = () => (
@@ -10,7 +9,7 @@ const Home = () => (
         href="/admin/view"
         className="inline-block rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
       >
-        Admin   
+        Admin
       </Link>
     </div>
     <ViewAnnouncements />
