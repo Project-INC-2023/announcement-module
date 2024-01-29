@@ -14,14 +14,14 @@ const CreateAnnouncement: React.FC = () => {
     content: ""
   })
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
-      setErrorMessage(`${newAnnouncement.title} announcement has been added`);
+      setTextMessage(`${newAnnouncement.title} announcement has been added`);
     },
     onError: (error) => {
-      setErrorMessage(`Error creating announcement: ${error.message}`);
+      setTextMessage(`Error creating announcement: ${error.message}`);
     },
   });
 
@@ -37,7 +37,7 @@ const CreateAnnouncement: React.FC = () => {
     e.preventDefault();
 
       if (!announcementData.title || !announcementData.content) {
-        setErrorMessage("Error: Please fill in both title and content.");
+        setTextMessage("Error: Please fill in both title and content.");
         return;
       }
 
@@ -51,7 +51,7 @@ const CreateAnnouncement: React.FC = () => {
         content: ""
       });
     } catch (error) {
-      setErrorMessage(`Error creating announcement: ${(error as Error).message}`);
+      setTextMessage(`Error creating announcement: ${(error as Error).message}`);
     }
   };
 
@@ -63,9 +63,9 @@ const CreateAnnouncement: React.FC = () => {
             Create Announcement
           </h1>
 
-          {errorMessage && (
-            <div className={`mb-4 ${errorMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
-              {errorMessage}
+          {textMessage && (
+            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+              {textMessage}
             </div>
           )}
 

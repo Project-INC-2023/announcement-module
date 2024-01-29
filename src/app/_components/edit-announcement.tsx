@@ -6,25 +6,25 @@ import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
 const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
-  const [anouncementTitle, setAnnouncementTitle] = useState<string>(title);
-  const [anouncementContent, setAnnouncementContent] =
-    useState<string>(content);
+  const [announcementTitle, setAnnouncementTitle] = useState<string>(title);
+  const [announcementContent, setAnnouncementContent] = useState<string>(content);
   const [announcementId] = useState<string>(id);
+  const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
   const updateAnnouncement = api.an.updateAnnouncement.useMutation({
     onSuccess: () => {
-      toast.success(`${anouncementTitle} has been edited!`);
+      setTextMessage(`${announcementTitle} has been edited!`);
     },
     onError: (error) => {
-      toast.error(`Update unsuccessful due to ${error.data?.code}`);
+      setTextMessage(`Error: Update unsuccessful due to ${error.data?.code}`);
     },
   });
 
   const saveEditAnnouncement = () => {
     const updatedAnnouncementBody = {
-      title: anouncementTitle,
-      content: anouncementContent,
+      title: announcementTitle,
+      content: announcementContent,
       id: announcementId,
     };
 
@@ -40,16 +40,22 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
             Edit Announcement
           </h1>
 
+          {textMessage && (
+            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+              {textMessage}
+            </div>
+          )}
+
           <input
             type="text"
             placeholder="Title"
-            value={anouncementTitle}
+            value={announcementTitle}
             onChange={(e) => setAnnouncementTitle(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
           <textarea
             placeholder="Content"
-            value={anouncementContent}
+            value={announcementContent}
             onChange={(e) => setAnnouncementContent(e.target.value)}
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
             rows={4}
