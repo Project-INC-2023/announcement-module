@@ -2,7 +2,6 @@
 
 import type { Announcement } from "@prisma/client";
 import { useState } from "react";
-import { toast } from "sonner";
 import { api } from "@/trpc/react";
 
 const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
