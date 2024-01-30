@@ -53,6 +53,12 @@ const AdminViewAnnouncements: React.FC = () => {
             </div>
             <h3 className="text-lg font-bold">{announcement.title}</h3>
             <p className="text-sm">{announcement.content}</p>
+            <p className="text-xs text-gray-500">
+                Created at: {new Date(announcement.createdAt).toLocaleString()}
+              </p>
+              <p className="text-xs text-gray-500">
+                Updated at: {new Date(announcement.updatedAt).toLocaleString()}
+              </p>
           </li>
         ))}
       </ul>

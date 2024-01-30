@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { initTRPC, TRPCError } from '@trpc/server';
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 

@@ -28,6 +28,7 @@ const createContext = cache(() => {
   });
 });
 
+// eslint-disable-next-line import/prefer-default-export
 export const api = createTRPCProxyClient<AppRouter>({
   transformer,
   links: [

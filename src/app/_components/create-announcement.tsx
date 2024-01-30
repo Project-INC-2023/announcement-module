@@ -50,6 +50,7 @@ const CreateAnnouncement: React.FC = () => {
         title: "",
         content: ""
       });
+      setTextMessage(null);
     } catch (error) {
       setTextMessage(`Error creating announcement: ${(error as Error).message}`);
     }

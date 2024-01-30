@@ -4,7 +4,7 @@ import Link from "next/link";
 import CreateAnnouncement from "@/app/_components/create-announcement";
 
 export const AdminCreatePage: React.FC = () => {
-
+  
 // removed announcement state and handleAnnouncementCreated func
   return (
     <div className="max-w mx-auto max-h-screen text-center">

@@ -1,3 +1,6 @@
+/* eslint-disable lines-around-directive */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/function-component-definition */
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
