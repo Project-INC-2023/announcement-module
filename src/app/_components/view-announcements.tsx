@@ -10,11 +10,11 @@ const ViewAnnouncements: React.FC = async () => {
     <div className="mx-auto max-w-md pt-12 text-center">
       <h2 className="text-2xl font-bold">User View Announcements</h2>
       {announcements.length === 0 ? (
-        <p className="text-xl mt-4 text-gray-500">There is no announcements yet</p>
+        <p data-testid="no-announcements" className="text-xl mt-4 text-gray-500">There is no announcements yet</p>
       ) : (
-        <ul className="mt-4">
+        <ul data-testid="all-announcements" className="mt-4">
           {announcements.map((announcement) => (
-            <li key={announcement.id} className="mb-4 rounded-lg bg-gray-200 p-3">
+            <li data-testid="first-announcement" key={announcement.id} className="mb-4 rounded-lg bg-gray-200 p-3">
               <h3 className="text-lg font-bold">{announcement.title}</h3>
               <p className="text-sm">{announcement.content}</p>
               <p className="text-xs text-gray-500">
