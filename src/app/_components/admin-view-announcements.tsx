@@ -17,7 +17,10 @@ const AdminViewAnnouncements: React.FC = () => {
   return (
     <div className="mx-auto max-w-md">
       <h2 className="py-10 text-2xl font-semibold">Admin Dashboard</h2>
-      <ul className="">
+      {announcements.length === 0 ? (
+        <p className="text-xl mt-4 text-gray-500">There is no announcements in the admin view yet</p>
+      ) : (
+        <ul>
         {announcements.map((announcement: Announcement) => (
           <li key={announcement.id} className="mb-4 rounded-lg bg-gray-200 p-3">
             <div className="flex justify-center gap-10">
@@ -53,6 +56,7 @@ const AdminViewAnnouncements: React.FC = () => {
           </li>
         ))}
       </ul>
+      )}
     </div>
   );
 };
