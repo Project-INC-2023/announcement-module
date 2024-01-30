@@ -25,6 +25,7 @@ const config = {
     "no-underscore-dangle": "off", // opinionated rule
     "import/prefer-default-export": "warn", // warn when not using default exports
     "no-void": "off", // allow using void
+    "import/no-extraneous-dependencies":"off",
     "react/function-component-definition": [
       "error",
       {
