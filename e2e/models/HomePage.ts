@@ -3,7 +3,7 @@ import { type Page, type Locator, expect } from "@playwright/test";
 export default class HomePage {
     readonly page: Page;
 
-    readonly url: string = "http://localhost:3000"
+    readonly url: string = "http://localhost:3000";
     
     readonly viewAnnouncementHeaderLocator: Locator;
 
@@ -22,7 +22,7 @@ export default class HomePage {
         this.noAnnouncementMessageLocator = page.getByTestId("no-announcements");
         this.allAnnouncementListLocator = page.getByTestId("all-announcements");
         this.adminLinkLocator = page
-            .getByTestId("admin-link")
+            .getByTestId("user-admin-link")
             .getByRole("link");
     }
 
@@ -46,7 +46,7 @@ export default class HomePage {
         return this.allAnnouncementListLocator.count();
     }
 
-    async clickAdminLink() {
+    async clickUserAdminLink() {
         await this.adminLinkLocator.click();
     }
 }

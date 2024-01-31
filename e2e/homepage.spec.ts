@@ -16,6 +16,6 @@ test.describe("user => homepage", () => {
             await homePage.allAnnouncementListVisible();
         }
         
-        await homePage.clickAdminLink();
+        await homePage.clickUserAdminLink();
     });
 });
