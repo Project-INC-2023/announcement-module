@@ -2,7 +2,7 @@ import { test } from "@playwright/test";
 import AdminHomePage from "./models/AdminHomePage";
 
 test.describe("admin => admin homepage", () => {
-    test("test run for admin homepage",async ({ page }) => {
+    test("test run for admin homepage", async ({ page }) => {
         const adminHomePage = new AdminHomePage(page);
         await adminHomePage.visit();
 

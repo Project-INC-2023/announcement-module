@@ -16,6 +16,7 @@ export default class HomePage {
 
     public constructor(page: Page) {
         this.page = page;
+        
         this.viewAnnouncementHeaderLocator = page.getByRole("heading", {
             name: "User View Announcements",
         });

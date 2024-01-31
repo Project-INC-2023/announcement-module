@@ -19,6 +19,7 @@ export default class AdminHomePage {
 
     public constructor(page: Page) {
         this.page = page;
+
         this.adminPageHeaderLocator = page.getByRole("heading", {
             name: "Admin Page",
         });
@@ -30,11 +31,11 @@ export default class AdminHomePage {
         this.adminAllAnnouncementsListLocator = page.getByTestId("admin-all-announcements");
 
         this.adminPageBackLinkLocator = page
-        .getByTestId("admin-back-link")
-        .getByRole("link");
+            .getByTestId("admin-back-link")
+            .getByRole("link");
         this.adminPageCreateLinkLocator = page
-        .getByTestId("admin-create-link")
-        .getByRole("link");
+            .getByTestId("admin-create-link")
+            .getByRole("link");
     }
 
     async visit() {

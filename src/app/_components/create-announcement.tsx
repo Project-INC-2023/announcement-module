@@ -72,6 +72,7 @@ const CreateAnnouncement: React.FC = () => {
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
+              data-testid="admin-create-title-input"
               type="text"
               name="title"
               placeholder="Title"
@@ -80,7 +81,8 @@ const CreateAnnouncement: React.FC = () => {
               className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
             />
             <textarea
-            name="content"
+              data-testid="admin-create-content-input"
+              name="content"
               placeholder="Content"
               value={announcementData.content}
               onChange={handleInputChange}
@@ -88,6 +90,7 @@ const CreateAnnouncement: React.FC = () => {
               rows={4}
             />
             <button
+              data-testid="admin-create-announcement-button"
               type="submit"
               className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
               disabled={createAnnouncement.isLoading}

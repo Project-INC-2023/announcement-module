@@ -9,7 +9,7 @@ export const AdminCreatePage: React.FC = () => {
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       <div className=" flex items-center justify-start bg-gray-200 py-4">
-        <div className="w-1/4">
+        <div data-testid="admin-create-back-link" className="w-1/4">
           <Link
             href="view"
             className=" h-9  rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
