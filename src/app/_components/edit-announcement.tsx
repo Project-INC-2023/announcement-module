@@ -5,15 +5,17 @@ import { useState } from "react";
 import { api } from "@/trpc/react";
 
 const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
-  const [announcementTitle, setAnnouncementTitle] = useState<string>(title);
-  const [announcementContent, setAnnouncementContent] = useState<string>(content);
-  const [announcementId] = useState<string>(id);
+  const [announcementData, setAnnouncementData] = useState({
+    title,
+    content,
+    id,
+  });
   const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
   const updateAnnouncement = api.an.updateAnnouncement.useMutation({
     onSuccess: () => {
-      setTextMessage(`${announcementTitle} has been edited!`);
+      setTextMessage(`${announcementData.title} has been edited!`);
     },
     onError: (error) => {
       setTextMessage(`Error: Update unsuccessful due to ${error.data?.code}`);
@@ -22,9 +24,9 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
 
   const saveEditAnnouncement = () => {
     const updatedAnnouncementBody = {
-      title: announcementTitle,
-      content: announcementContent,
-      id: announcementId,
+      title: announcementData.title,
+      content: announcementData.content,
+      id: announcementData.id,
     };
 
     updateAnnouncement.mutate(updatedAnnouncementBody);
@@ -40,7 +42,9 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
           </h1>
 
           {textMessage && (
-            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+            <div
+              className={`mb-4 ${textMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
+            >
               {textMessage}
             </div>
           )}
@@ -48,14 +52,26 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
           <input
             type="text"
             placeholder="Title"
-            value={announcementTitle}
-            onChange={(e) => setAnnouncementTitle(e.target.value)}
+            value={announcementData.title}
+            onChange={(e) =>
+              setAnnouncementData({
+                title: e.target.value,
+                content: announcementData.content,
+                id: announcementData.id,
+              })
+            }
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
           />
           <textarea
             placeholder="Content"
-            value={announcementContent}
-            onChange={(e) => setAnnouncementContent(e.target.value)}
+            value={announcementData.content}
+            onChange={(e) =>
+              setAnnouncementData({
+                title: announcementData.title,
+                content: e.target.value,
+                id: announcementData.id,
+              })
+            }
             className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
             rows={4}
           />
