@@ -18,8 +18,6 @@ export const AdminCreatePage: React.FC = () => {
           </Link>
         </div>
 
-
-
         <h2 className="w-1/2 text-xl font-semibold">Admin Create Page</h2>
       </div>
 
