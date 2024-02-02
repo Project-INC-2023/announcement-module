@@ -44,6 +44,7 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
           {textMessage && (
             <div
               className={`mb-4 ${textMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
+              data-testid="admin-edit-message"
             >
               {textMessage}
             </div>
@@ -51,6 +52,7 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
 
           <input
             type="text"
+            data-testid="admin-edit-title-input"
             placeholder="Title"
             value={announcementData.title}
             onChange={(e) =>
@@ -64,6 +66,7 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
           />
           <textarea
             placeholder="Content"
+            data-testid="admin-edit-title-content"
             value={announcementData.content}
             onChange={(e) =>
               setAnnouncementData({
@@ -77,6 +80,7 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
           />
           <button
             type="button"
+            data-testid="admin-edit-announcement-button"
             className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
             onClick={() => {
               saveEditAnnouncement();

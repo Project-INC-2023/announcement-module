@@ -20,7 +20,7 @@ const AdminEdit: React.FC = () => {
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       <div className=" flex items-center justify-start bg-gray-200 py-4">
-        <div className="w-1/4">
+        <div data-testid="admin-edit-back-link" className="w-1/4">
           <Link
             href="/admin/view"
             className=" h-9  rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
@@ -44,6 +44,7 @@ const AdminEdit: React.FC = () => {
               title={announcementRawData.title}
               content={announcementRawData.content}
               createdAt={announcementRawData.createdAt}
+              updatedAt={announcementRawData.updatedAt}
             />
           )}
         </div>
