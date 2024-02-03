@@ -4,7 +4,11 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { Toaster } from 'sonner';
+import { redirect } from "next/navigation";
+
 import { TRPCReactProvider } from "@/trpc/react";
+import { getServerAuthSession } from "@/server/auth";
+
 
 
 const inter = Inter({
@@ -19,11 +23,15 @@ export const metadata = {
 };
 
 // eslint-disable-next-line react/function-component-definition
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  // const session = await getServerAuthSession();
+  // if (!session?.user) return redirect("/")
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
