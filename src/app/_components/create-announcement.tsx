@@ -65,7 +65,9 @@ const CreateAnnouncement: React.FC = () => {
           </h1>
 
           {textMessage && (
-            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}
+                 data-testid="admin-create-message"
+            >
               {textMessage}
             </div>
           )}

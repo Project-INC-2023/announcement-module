@@ -15,7 +15,7 @@ export default class AdminCreatePage {
 
     readonly adminCreateAnnouncementButtonLocator: Locator;
 
-    // readonly announcementCreatedMessageLocator: Locator;
+    readonly announcementMessageLocator: Locator;
 
     // readonly announcementErrorMessageLocator: Locator; // how to input dynamic messages
 
@@ -32,9 +32,9 @@ export default class AdminCreatePage {
         });
 
         this.adminCreateAnnouncementTitleInputLocator = page.getByTestId("admin-create-title-input");
-        this.adminCreateAnnouncementContentInputLocator = page.getByTestId("admin-create-content-input")
+        this.adminCreateAnnouncementContentInputLocator = page.getByTestId("admin-create-content-input");
 
-        // this.announcementCreatedMessageLocator = page.getByText("")
+        this.announcementMessageLocator = page.getByTestId("admin-create-message");
 
         this.adminCreateAnnouncementButtonLocator = page.getByTestId("admin-create-announcement-button");
 
@@ -59,10 +59,11 @@ export default class AdminCreatePage {
         await this.adminCreateAnnouncementTitleInputLocator.fill(title)
         await this.adminCreateAnnouncementContentInputLocator.fill(content)
         await this.adminCreateAnnouncementButtonLocator.click();
+        await this.announcementMessageLocator.innerText();
     }
 
-    // async isAnnouncementCreated() {
-    //     await expect(this.announcementCreatedMessageLocator).toBeVisible();
+    // async isAnnouncementMessageVisible() {
+    //     await expect(this.announcementMessageLocator).toBeVisible();
     // } 
 
     // async isAnnouncementErrorMessageVisible() {
