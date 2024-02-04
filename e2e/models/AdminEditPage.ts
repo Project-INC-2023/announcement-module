@@ -15,7 +15,7 @@ export default class AdminEditPage {
 
   readonly adminEditAnnouncementButtonLocator: Locator;
 
-  readonly announcementEditMessageLocator: Locator;
+  readonly announcementEditMessageSuccessLocator: Locator;
 
   readonly adminEditBackLinkLocator: Locator;
 
@@ -44,7 +44,7 @@ export default class AdminEditPage {
       .getByTestId("admin-edit-back-link")
       .getByRole("link");
 
-    this.announcementEditMessageLocator =
+    this.announcementEditMessageSuccessLocator =
       page.getByTestId("admin-edit-message");
   }
 
@@ -64,7 +64,9 @@ export default class AdminEditPage {
     await this.adminEditAnnouncementTitleInputLocator.fill(title);
     await this.adminEditAnnouncementContentInputLocator.fill(content);
     await this.adminEditAnnouncementButtonLocator.click();
-    await this.announcementEditMessageLocator.innerText();
+    await expect(this.announcementEditMessageSuccessLocator).toContainText(
+      "has been edited!",
+    );
   }
 
   async clickAdminEditBackLink() {
