@@ -1,12 +1,15 @@
 // prob dont need use client here
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import AdminViewAnnouncements from "@/app/_components/admin-view-announcements";
 import { getServerAuthSession } from "@/server/auth";
+import SignOutButton from "@/app/_components/signOutButton";
 // find out whether React.FC should be used since its prob discouraged now
 
 // eslint-disable-next-line @next/next/no-async-client-component
 const AdminPage: React.FC = async () => {
   const session = (await getServerAuthSession())!;
+  if (!session?.user) return redirect("/");
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">
@@ -37,10 +40,11 @@ const AdminPage: React.FC = async () => {
           {session?.user ? (
             <>
               <p>{`Logged in as: ${session.user.name}`}</p>
+              <SignOutButton/>
               <AdminViewAnnouncements />
             </>
           ) : (
-            <p>No user logged in</p>
+            <p>No user logged in</p>  
           )}
         </div>
       </div>
