@@ -5,10 +5,9 @@ import { cookies } from "next/headers";
 
 import { Toaster } from 'sonner';
 import { redirect } from "next/navigation";
-
+import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "@/trpc/react";
 import { getServerAuthSession } from "@/server/auth";
-
 
 
 const inter = Inter({
@@ -29,8 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
 
-  // const session = await getServerAuthSession();
-  // if (!session?.user) return redirect("/")
+  // const session = await getServerAuthSession(); // Fetch the session
 
   return (
     <html lang="en">
