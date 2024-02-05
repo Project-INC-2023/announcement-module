@@ -45,7 +45,7 @@ const AdminViewAnnouncements: React.FC = () => {
               <div className="w-1/2">
                 <Link
                   className="border-2 border-black px-2"
-                  href={`edit/${announcement.id}`}
+                  href={`admin/edit/${announcement.id}`}
                 >
                   Edit
                 </Link>

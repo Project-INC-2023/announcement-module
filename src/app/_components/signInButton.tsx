@@ -8,7 +8,7 @@ const SignInButton = () => {
       <button
         type="button"
         onClick={() => {
-          signIn("github", {callbackUrl:"/user"}).catch(console.error);
+          signIn("github", {callbackUrl:"/viewAnnouncement"}).catch(console.error);
         }}
         className="p-3 text-xl  bg-blue-500 text-white rounded hover:bg-blue-700"
       >

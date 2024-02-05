@@ -6,7 +6,7 @@ import { getServerAuthSession } from "@/server/auth";
 
 const Home = async () => {
   const session = (await getServerAuthSession())!;
-  if (session?.user) redirect("/user");
+  if (session?.user) redirect("/viewAnnouncement");
   
   return(
   <div className="relative">
