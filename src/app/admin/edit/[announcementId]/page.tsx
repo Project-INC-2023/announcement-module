@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import EditAnnouncement from "@/app/_components/edit-announcement";
-import { getServerAuthSession } from "@/server/auth";
 
 const AdminEdit: React.FC = () => {
   const router = useRouter();
