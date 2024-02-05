@@ -11,7 +11,6 @@ import {
 import GitHubProvider from "next-auth/providers/github";
 import { db } from "@/server/db";
 
-
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -22,8 +21,6 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: DefaultSession["user"] & {
       id: string;
-      // ...other properties
-      // role: UserRole;
     };
   }
 

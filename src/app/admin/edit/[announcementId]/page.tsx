@@ -44,6 +44,7 @@ const AdminEdit: React.FC = () => {
               title={announcementRawData.title}
               content={announcementRawData.content}
               createdAt={announcementRawData.createdAt}
+              updatedAt={announcementRawData.updatedAt}
             />
           )}
         </div>
