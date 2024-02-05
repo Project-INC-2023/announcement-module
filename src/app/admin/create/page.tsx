@@ -11,7 +11,7 @@ export const AdminCreatePage: React.FC = async () => {
       <div className=" flex items-center justify-start bg-gray-200 py-4">
         <div data-testid="admin-create-back-link" className="w-1/4">
           <Link
-            href="view"
+            href="/viewAnnouncement"
             className=" h-9  rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
             Back to the admin dashboard

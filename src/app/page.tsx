@@ -1,18 +1,18 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import SignInButton from "./_components/signInButton";
-import ViewAnnouncements from "./_components/view-announcements";
 import { getServerAuthSession } from "@/server/auth";
 
 const Home = async () => {
   const session = (await getServerAuthSession())!;
-  if (session?.user) redirect("/user");
+  if (session?.user) redirect("/viewAnnouncement");
   
-  return(
-  <div className="relative">
-    <div className="h-full flex items-center justify-center"> Login Page</div>
-    <SignInButton />
-  </div>
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-slate-100">
+      <div className="max-w-md w-full p-6 bg-slate-200 rounded-md shadow-md">
+        <h2 className="text-2xl text-center font-semibold mb-4">Login Page</h2>
+        <SignInButton />
+      </div>
+    </div>
   );
 };
 

@@ -6,12 +6,14 @@ import { signOut } from "next-auth/react";
 
 const SignOutButton = () => {
   return (
-    <button type="button"
+    <button
+      type="button"
       onClick={() => {
-        signOut({callbackUrl: "/"}).catch(console.error);
+        signOut({ callbackUrl: "/" }).catch(console.error);
       }}
-    >   
-      Sign out
+      className="rounded border-2 border-red-500 px-4 py-2 font-bold text-black hover:bg-red-700 ml-2"
+    >
+      Sign Out
     </button>
   );
 };

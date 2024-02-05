@@ -29,7 +29,7 @@ export default async function RootLayout({
 }) {
 
   // const session = await getServerAuthSession(); // Fetch the session
-
+  // if (!session?.user) redirect("/")
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/trpc/react";
 import EditAnnouncement from "@/app/_components/edit-announcement";
+import { getServerAuthSession } from "@/server/auth";
 
 const AdminEdit: React.FC = () => {
   const router = useRouter();
@@ -22,7 +23,7 @@ const AdminEdit: React.FC = () => {
       <div className=" flex items-center justify-start bg-gray-200 py-4">
         <div className="w-1/4">
           <Link
-            href="/admin/view"
+            href="/viewAnnouncement"
             className=" h-9  rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
           >
             Back to the admin dashboard
