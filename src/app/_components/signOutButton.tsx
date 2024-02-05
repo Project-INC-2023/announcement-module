@@ -8,9 +8,9 @@ const SignOutButton = () => {
   return (
     <button type="button"
       onClick={() => {
-        signOut().catch(console.error);
+        signOut({callbackUrl: "/"}).catch(console.error);
       }}
-    >
+    >   
       Sign out
     </button>
   );
