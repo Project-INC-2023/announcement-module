@@ -1,18 +1,9 @@
-"use client";
-
 import Link from "next/link";
+import { api } from "@/trpc/server";
+import DeleteButton from "./admin-delete-announcement-button";
 
-import { toast } from "sonner";
-
-import type { Announcement } from "@prisma/client"; // changed all types to prisma types
-
-import { api } from "@/trpc/react";
-// import { Announcement } from "@/types/announcement";
-
-const AdminViewAnnouncements: React.FC = () => {
-  const { data: announcements = [], refetch: reload } = api.an.getAllAnnouncements.useQuery();
-
-  const deleteFunction = api.an.deleteAnnouncement.useMutation();
+const AdminViewAnnouncements: React.FC = async () => {
+  const announcements = await api.an.getAllAnnouncements.query();
 
   return (
     <div className="mx-auto max-w-md">
@@ -21,27 +12,10 @@ const AdminViewAnnouncements: React.FC = () => {
         <p data-testid="admin-no-announcements" className="text-xl mt-4 text-gray-500">There is no announcements in the admin view yet</p>
       ) : (
         <ul data-testid="admin-all-announcements">
-        {announcements.map((announcement: Announcement) => (
+        {announcements.map((announcement) => (
           <li key={announcement.id} className="mb-4 rounded-lg bg-gray-200 p-3">
             <div className="flex justify-center gap-10">
-              <div className="w-1/2 text-red-500">
-                <button
-                  type="button"
-                  className=" border-2 border-red-500 px-2"
-                  onClick={() => {
-                    toast.promise(deleteFunction.mutateAsync(announcement.id), {
-                      loading: "Deleting...",
-                      success: () => {
-                        void reload(); // need check if this is the correct way of resolving eslint@typescript-eslint/no-floating-promises
-                        return "Deleted!";
-                      },
-                      error: "Something went wrong!",
-                    });
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
+              <DeleteButton id={announcement.id}/>
               <div className="w-1/2">
                 <Link
                   className="border-2 border-black px-2"
