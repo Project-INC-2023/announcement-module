@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import type { Announcement } from "@prisma/client"; // changed all types to prisma types
 
 import { api } from "@/trpc/react";
+import { Button } from "@/_components/ui/button";
 // import { Announcement } from "@/types/announcement";
 
 const AdminViewAnnouncements: React.FC = () => {
@@ -33,10 +34,10 @@ const AdminViewAnnouncements: React.FC = () => {
               className="mb-4 rounded-lg bg-gray-200 p-3"
             >
               <div className="flex justify-center gap-10">
-                <div className="w-1/2 text-red-500">
-                  <button
+                <div className="flex w-1/2 justify-start">
+                  <Button
                     type="button"
-                    className=" border-2 border-red-500 px-2"
+                    className=" border-2 border-none bg-red-500 px-4"
                     onClick={() => {
                       toast.promise(
                         deleteFunction.mutateAsync(announcement.id),
@@ -52,15 +53,17 @@ const AdminViewAnnouncements: React.FC = () => {
                     }}
                   >
                     Delete
-                  </button>
+                  </Button>
                 </div>
-                <div className="w-1/2">
-                  <Link
-                    className="border-2 border-black px-2"
-                    href={`admin/edit/${announcement.id}`}
-                  >
-                    Edit
-                  </Link>
+                <div className="flex w-1/2 justify-end">
+                  <Button className="p-0">
+                    <Link
+                      className="px-4"
+                      href={`admin/edit/${announcement.id}`}
+                    >
+                      Edit
+                    </Link>
+                  </Button>
                 </div>
               </div>
               <h3 className="text-lg font-bold">{announcement.title}</h3>
