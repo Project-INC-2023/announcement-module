@@ -2,7 +2,7 @@ import Link from "next/link";
 import CreateAnnouncement from "@/app/_components/create-announcement";
 import { getServerAuthSession } from "@/server/auth";
 
-export const AdminCreatePage: React.FC = async () => {
+const AdminCreatePage: React.FC = async () => {
   const session = (await getServerAuthSession())!;
 
   // removed announcement state and handleAnnouncementCreated func
