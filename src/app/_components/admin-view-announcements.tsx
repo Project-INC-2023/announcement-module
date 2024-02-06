@@ -1,9 +1,19 @@
-import Link from "next/link";
-import { api } from "@/trpc/server";
-import DeleteButton from "./admin-delete-announcement-button";
+"use client";
 
-const AdminViewAnnouncements: React.FC = async () => {
-  const announcements = await api.an.getAllAnnouncements.query();
+import Link from "next/link";
+
+import { toast } from "sonner";
+
+import type { Announcement } from "@prisma/client"; // changed all types to prisma types
+
+import { api } from "@/trpc/react";
+// import { Announcement } from "@/types/announcement";
+
+const AdminViewAnnouncements: React.FC = () => {
+  const { data: announcements = [], refetch: reload } =
+    api.an.getAllAnnouncements.useQuery();
+
+  const deleteFunction = api.an.deleteAnnouncement.useMutation();
 
   return (
     <div className="mx-auto max-w-md">
@@ -17,16 +27,33 @@ const AdminViewAnnouncements: React.FC = async () => {
         </p>
       ) : (
         <ul data-testid="admin-all-announcements">
-          {announcements.map((announcement) => (
+          {announcements.map((announcement: Announcement) => (
             <li
               key={announcement.id}
               className="mb-4 rounded-lg bg-gray-200 p-3"
             >
               <div className="flex justify-center gap-10">
-                <div className="w-1/2">
-                  <DeleteButton id={announcement.id} />
+                <div className="w-1/2 text-red-500">
+                  <button
+                    type="button"
+                    className=" border-2 border-red-500 px-2"
+                    onClick={() => {
+                      toast.promise(
+                        deleteFunction.mutateAsync(announcement.id),
+                        {
+                          loading: "Deleting...",
+                          success: () => {
+                            void reload(); // need check if this is the correct way of resolving eslint@typescript-eslint/no-floating-promises
+                            return "Deleted!";
+                          },
+                          error: "Something went wrong!",
+                        },
+                      );
+                    }}
+                  >
+                    Delete
+                  </button>
                 </div>
-
                 <div className="w-1/2">
                   <Link
                     className="border-2 border-black px-2"
