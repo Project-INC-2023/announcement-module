@@ -11,8 +11,6 @@ import type { User } from "@prisma/client";
 import GitHubProvider from "next-auth/providers/github";
 import { db } from "@/server/db";
 
-
-
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -21,7 +19,7 @@ import { db } from "@/server/db";
  */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: User
+    user: User;
   }
 
   // interface User {
@@ -48,8 +46,8 @@ export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
     GitHubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
+      clientId: process.env.GITHUB_CLIENT_ID ?? "",
+      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
     }),
     // DiscordProvider({
     //   clientId: env.DISCORD_CLIENT_ID,

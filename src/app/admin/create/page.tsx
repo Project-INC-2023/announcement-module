@@ -1,11 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import CreateAnnouncement from "@/app/_components/create-announcement";
+import { getServerAuthSession } from "@/server/auth";
 
-export const AdminCreatePage: React.FC = () => {
-  
-// removed announcement state and handleAnnouncementCreated func
+const AdminCreatePage: React.FC = async () => {
+  const session = (await getServerAuthSession())!;
+
+  // removed announcement state and handleAnnouncementCreated func
   return (
     <div className="max-w mx-auto max-h-screen text-center">
       <div className=" flex items-center justify-start bg-gray-200 py-4">
@@ -22,9 +22,16 @@ export const AdminCreatePage: React.FC = () => {
       </div>
 
       <div className="flex">
-        <div className="w-full items-center pt-40">
-          <CreateAnnouncement />
-        </div>
+        {session.user ? (
+          <div>
+            <p>{`Logged in as: ${session.user.name}`}</p>
+            <div className="w-full items-center pt-40">
+              <CreateAnnouncement />
+            </div>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
       </div>
     </div>
   );
