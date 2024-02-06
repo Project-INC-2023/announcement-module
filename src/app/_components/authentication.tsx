@@ -14,7 +14,9 @@ const LoginPage = () => {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <form>
+        <h1 className="text-2xl text-center mb-4 font-semibold tracking-tight">Sign in</h1>
+        <p className="text-sm text-muted-foreground text-center mb-4"> Welcome to announcement module! </p>
+        <form>   
           <div className="mb-4">
             <Label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
               Email
