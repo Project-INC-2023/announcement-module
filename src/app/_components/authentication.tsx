@@ -40,14 +40,18 @@ const LoginPage = () => {
           <span className="w-full text-xs text-gray-500 uppercase">Or continue with</span>
           <div className="w-full border-t border-gray-300" />
         </div>
-        <Button variant="outline" type="button" disabled={isLoading} className="mt-4 h-10 w-full">
+        <Button variant="outline" 
+                type="button" 
+                disabled={isLoading} 
+                className="mt-4 h-10 w-full" 
+                onClick={() => {
+                        signIn("github", { callbackUrl: "/viewAnnouncement" })
+                        .catch(console.error);
+                        }}>
           {isLoading ? 
             <ImSpinner2 className="mr-2 h-4 w-4 animate-spin" /> 
             : 
-            <FaGithub className="mr-2 h-6 w-4"
-                      onClick={() => {
-                        signIn("github", { callbackUrl: "/viewAnnouncement" }).catch(console.error);
-                      }} />}
+            <FaGithub className="mr-2 h-6 w-4" />}
           GitHub
         </Button>
       </div>

@@ -1,15 +1,13 @@
 // AdminPage.tsx
 
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import AdminViewAnnouncements from "@/app/_components/admin-view-announcements";
 import { getServerAuthSession } from "@/server/auth";
 import { Button } from "@/_components/ui/button";
-import ProfileDropDownMenu from "../_components/profileDropDownMenu";
+import ProfileDropDownMenu from "../../_components/profileDropDownMenu";
 
 const AdminPage: React.FC = async () => {
   const session = (await getServerAuthSession())!;
-  if (!session?.user) return redirect("/");
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">

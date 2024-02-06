@@ -9,7 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "@/trpc/react";
 import { getServerAuthSession } from "@/server/auth";
 
-
+// protected layout
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -27,9 +27,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+    // users who are not logged in cannot enter any pages except login
+   const session = await getServerAuthSession();
+   if (!session?.user) return redirect("/");
 
-  // const session = await getServerAuthSession(); // Fetch the session
-  // if (!session?.user) redirect("/")
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
