@@ -22,16 +22,9 @@ const AdminCreatePage: React.FC = async () => {
       </div>
 
       <div className="flex">
-        {session.user ? (
-          <div>
-            <p>{`Logged in as: ${session.user.name}`}</p>
-            <div className="w-full items-center pt-40">
-              <CreateAnnouncement />
-            </div>
-          </div>
-        ) : (
-          <p>Loading...</p>
-        )}
+        <div className="w-full items-center pt-40">
+          <CreateAnnouncement />
+        </div>
       </div>
     </div>
   );

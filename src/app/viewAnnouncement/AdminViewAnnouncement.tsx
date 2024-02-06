@@ -12,16 +12,14 @@ const AdminPage: React.FC = async () => {
 
   return (
     <div className="max-w mx-auto max-h-screen text-center">
-     <div className="flex items-center justify-between bg-gray-200 py-4">
-       
-
-        <h2 className="flex-grow ml-44 text-xl font-semibold">Admin page</h2>
+      <div className="flex items-center justify-between bg-gray-200 py-4">
+        <h2 className="ml-44 flex-grow text-xl font-semibold">Admin page</h2>
 
         <div className="flex items-center">
           <SignOutButton />
           <Link
             href="admin/create"
-            className="rounded border-2 border-green-500 px-4 py-2 font-bold text-green-500 hover:bg-green-700 ml-2"
+            className="mx-2 rounded border-2 border-green-500 px-4 py-2 font-bold text-green-500 hover:bg-green-700"
           >
             Create
           </Link>
@@ -30,10 +28,10 @@ const AdminPage: React.FC = async () => {
 
       <div className="flex">
         <div className="w-full">
-          {session?.user ? (   
-            <AdminViewAnnouncements />  
+          {session?.user ? (
+            <AdminViewAnnouncements />
           ) : (
-            <p>No user logged in</p>  
+            <p>No user logged in</p>
           )}
         </div>
       </div>
