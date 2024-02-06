@@ -10,7 +10,7 @@ const UserPage = async () => {
   return (
     <div className="relative flex">
       <div className="w-full pt-3 items-center justify-between">
-        <SignOutButton />
+        {/* <SignOutButton /> */}
         <ViewAnnouncements />
       </div>
     </div>
