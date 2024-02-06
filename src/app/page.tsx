@@ -11,6 +11,7 @@ const Home = async () => {
   if (session?.user) redirect("/viewAnnouncement");
   
   return (
+    
     <Card className="w-[350px] shadow-md">
     <CardHeader>
       <CardTitle>Create project</CardTitle>
