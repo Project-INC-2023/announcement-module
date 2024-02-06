@@ -1,60 +1,70 @@
 "use client";
 
 import { useState } from "react";
+import { z } from "zod";
+import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  Form,
+} from "@/_components/ui/form";
 import { api } from "@/trpc/react";
-// import { CreateAnnouncementProps } from "@/types/announcement";
+import { Input } from "@/_components/ui/input";
+import { Button } from "@/_components/ui/button";
 
-// removed prop CreateAnnouncementProps as its not needed
-// changed to using objects to manage all states
-// could take out React.FC
-// changed success/error messages to a normal div instead of a toast
+const announcementCreateSchema = z.object({
+  title: z
+    .string()
+    .min(2, {
+      message: "Title must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Title has to be lesser than 50 characters.",
+    }),
+  content: z.string().min(4, {
+    message: "Content must be at least 4 characters.",
+  }),
+});
+
 const CreateAnnouncement: React.FC = () => {
-  const [announcementData, setAnnouncementData] = useState({
-    title: "",
-    content: ""
-  })
+  const form = useForm<z.infer<typeof announcementCreateSchema>>({
+    resolver: zodResolver(announcementCreateSchema),
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+  });
 
   const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
-      setTextMessage(`${newAnnouncement.title} announcement has been added`);
+      toast.success(`${newAnnouncement.title} announcement has been added`);
     },
     onError: (error) => {
-      setTextMessage(`Error creating announcement: ${error.message}`);
+      toast.error(`Error creating announcement: ${error.message}`);
     },
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setAnnouncementData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-      if (!announcementData.title || !announcementData.content) {
-        setTextMessage("Error: Please fill in both title and content.");
-        return;
-      }
-
+  function onSubmit(values: z.infer<typeof announcementCreateSchema>) {
     try {
       createAnnouncement.mutate({
-        title: announcementData.title,
-        content: announcementData.content,
-      });
-      setAnnouncementData({
-        title: "",
-        content: ""
+        title: values.title,
+        content: values.content,
       });
       setTextMessage(null);
     } catch (error) {
-      setTextMessage(`Error creating announcement: ${(error as Error).message}`);
+      setTextMessage(
+        `Error creating announcement: ${(error as Error).message}`,
+      );
     }
-  };
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -65,12 +75,50 @@ const CreateAnnouncement: React.FC = () => {
           </h1>
 
           {textMessage && (
-            <div className={`mb-4 ${textMessage.startsWith("Error") ? 'text-red-500' : 'text-green-500'}`}>
+            <div
+              className={`mb-4 ${textMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
+            >
               {textMessage}
             </div>
           )}
-
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Title" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Title.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Content" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Content.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Create Announcement</Button>
+            </form>
+          </Form>
+          {/* <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <input
               data-testid="admin-create-title-input"
               type="text"
@@ -96,8 +144,8 @@ const CreateAnnouncement: React.FC = () => {
               disabled={createAnnouncement.isLoading}
             >
               {createAnnouncement.isLoading ? "Submitting..." : "Submit"}
-            </button>
-          </form>
+            </button> */}
+          {/* </form> */}
         </div>
       </div>
     </div>
