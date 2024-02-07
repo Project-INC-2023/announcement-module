@@ -1,11 +1,9 @@
-import { redirect } from "next/navigation";
-import ViewAnnouncements from "../_components/view-announcements";
+import ViewAnnouncements from "../../_components/view-announcements";
 import { getServerAuthSession } from "@/server/auth";
 import ProfileDropDownMenu from "@/app/_components/profileDropDownMenu";
 
 const UserPage = async () => {
   const session = (await getServerAuthSession())!;
-  if (!session?.user) return redirect("/");
 
   return (
     <div className="relative flex flex-col">
