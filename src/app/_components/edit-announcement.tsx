@@ -1,38 +1,70 @@
 "use client";
 
 import type { Announcement } from "@prisma/client";
-import { useState } from "react";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  Form,
+} from "@/_components/ui/form";
+import { Input } from "@/_components/ui/input";
 import { api } from "@/trpc/react";
+import { Button } from "@/_components/ui/button";
+import { Textarea } from "@/_components/ui/textarea";
+
+const announcementSchema = z.object({
+  title: z
+    .string()
+    .min(2, {
+      message: "Title must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Title has to be lesser than 50 characters.",
+    }),
+  content: z.string().min(4, {
+    message: "Content must be at least 4 characters.",
+  }),
+});
 
 const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
-  const [announcementData, setAnnouncementData] = useState({
-    title,
-    content,
-    id,
+  const form = useForm<z.infer<typeof announcementSchema>>({
+    resolver: zodResolver(announcementSchema),
+    defaultValues: {
+      title,
+      content,
+    },
   });
-  const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const { refetch: reload } = api.an.getAllAnnouncements.useQuery();
+
   const updateAnnouncement = api.an.updateAnnouncement.useMutation({
-    onSuccess: () => {
-      setTextMessage(`${announcementData.title} has been edited!`);
+    onSuccess: (editedAnnouncement) => {
+      toast.success(`${editedAnnouncement.title} has been edited!`);
     },
     onError: (error) => {
-      setTextMessage(`Error: Update unsuccessful due to ${error.data?.code}`);
+      toast.error(`Error: Update unsuccessful due to ${error.data?.code}`);
     },
   });
 
-  const saveEditAnnouncement = () => {
+  function onSubmit(values: z.infer<typeof announcementSchema>) {
     const updatedAnnouncementBody = {
-      title: announcementData.title,
-      content: announcementData.content,
-      id: announcementData.id,
+      title: values.title,
+      content: values.content,
+      id,
     };
 
     updateAnnouncement.mutate(updatedAnnouncementBody);
 
     void reload();
-  };
+  }
+
   return (
     <div className="flex h-full flex-col">
       <div className="flex flex-grow items-center justify-center">
@@ -41,49 +73,43 @@ const EditAnnouncement: React.FC<Announcement> = ({ title, id, content }) => {
             Edit Announcement
           </h1>
 
-          {textMessage && (
-            <div
-              className={`mb-4 ${textMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
-            >
-              {textMessage}
-            </div>
-          )}
-
-          <input
-            type="text"
-            placeholder="Title"
-            value={announcementData.title}
-            onChange={(e) =>
-              setAnnouncementData({
-                title: e.target.value,
-                content: announcementData.content,
-                id: announcementData.id,
-              })
-            }
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-          />
-          <textarea
-            placeholder="Content"
-            value={announcementData.content}
-            onChange={(e) =>
-              setAnnouncementData({
-                title: announcementData.title,
-                content: e.target.value,
-                id: announcementData.id,
-              })
-            }
-            className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-            rows={4}
-          />
-          <button
-            type="button"
-            className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
-            onClick={() => {
-              saveEditAnnouncement();
-            }}
-          >
-            Edit
-          </button>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Title" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Title.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <Textarea rows={4} placeholder="Content" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Content.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Edit Announcement</Button>
+            </form>
+          </Form>
         </div>
       </div>
     </div>

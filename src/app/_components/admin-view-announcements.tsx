@@ -3,14 +3,14 @@
 import Link from "next/link";
 
 import { toast } from "sonner";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faEdit } from "@fortawesome/free-regular-svg-icons";
 import type { Announcement } from "@prisma/client"; // changed all types to prisma types
 
 import { api } from "@/trpc/react";
 import { Button } from "@/_components/ui/button";
-// import { Announcement } from "@/types/announcement";
 
-const AdminViewAnnouncements: React.FC = () => {
+const AdminViewAnnouncements = () => {
   const { data: announcements = [], refetch: reload } =
     api.an.getAllAnnouncements.useQuery();
 
@@ -37,7 +37,8 @@ const AdminViewAnnouncements: React.FC = () => {
                 <div className="flex w-1/2 justify-start">
                   <Button
                     type="button"
-                    className=" border-2 border-none bg-red-500 px-4"
+                    variant="ghost"
+                    className=""
                     onClick={() => {
                       toast.promise(
                         deleteFunction.mutateAsync(announcement.id),
@@ -52,16 +53,16 @@ const AdminViewAnnouncements: React.FC = () => {
                       );
                     }}
                   >
-                    Delete
+                    <FontAwesomeIcon
+                      className="h-5 text-red-500"
+                      icon={faTrashCan}
+                    />
                   </Button>
                 </div>
                 <div className="flex w-1/2 justify-end">
-                  <Button className="p-0">
-                    <Link
-                      className="px-4"
-                      href={`admin/edit/${announcement.id}`}
-                    >
-                      Edit
+                  <Button variant="ghost">
+                    <Link className="" href={`admin/edit/${announcement.id}`}>
+                      <FontAwesomeIcon className="h-5" icon={faEdit} />
                     </Link>
                   </Button>
                 </div>

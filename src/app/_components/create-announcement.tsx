@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +17,7 @@ import { api } from "@/trpc/react";
 import { Input } from "@/_components/ui/input";
 import { Button } from "@/_components/ui/button";
 
-const announcementCreateSchema = z.object({
+const announcementSchema = z.object({
   title: z
     .string()
     .min(2, {
@@ -32,16 +31,14 @@ const announcementCreateSchema = z.object({
   }),
 });
 
-const CreateAnnouncement: React.FC = () => {
-  const form = useForm<z.infer<typeof announcementCreateSchema>>({
-    resolver: zodResolver(announcementCreateSchema),
+const CreateAnnouncement = () => {
+  const form = useForm<z.infer<typeof announcementSchema>>({
+    resolver: zodResolver(announcementSchema),
     defaultValues: {
       title: "",
       content: "",
     },
   });
-
-  const [textMessage, setTextMessage] = useState<string | null>(null);
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
@@ -52,17 +49,14 @@ const CreateAnnouncement: React.FC = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof announcementCreateSchema>) {
+  function onSubmit(values: z.infer<typeof announcementSchema>) {
     try {
       createAnnouncement.mutate({
         title: values.title,
         content: values.content,
       });
-      setTextMessage(null);
     } catch (error) {
-      setTextMessage(
-        `Error creating announcement: ${(error as Error).message}`,
-      );
+      toast.error(`Error creating announcement`);
     }
   }
 
@@ -74,13 +68,6 @@ const CreateAnnouncement: React.FC = () => {
             Create Announcement
           </h1>
 
-          {textMessage && (
-            <div
-              className={`mb-4 ${textMessage.startsWith("Error") ? "text-red-500" : "text-green-500"}`}
-            >
-              {textMessage}
-            </div>
-          )}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -118,34 +105,6 @@ const CreateAnnouncement: React.FC = () => {
               <Button type="submit">Create Announcement</Button>
             </form>
           </Form>
-          {/* <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <input
-              data-testid="admin-create-title-input"
-              type="text"
-              name="title"
-              placeholder="Title"
-              value={announcementData.title}
-              onChange={handleInputChange}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-            />
-            <textarea
-              data-testid="admin-create-content-input"
-              name="content"
-              placeholder="Content"
-              value={announcementData.content}
-              onChange={handleInputChange}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-              rows={4}
-            />
-            <button
-              data-testid="admin-create-announcement-button"
-              type="submit"
-              className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
-              disabled={createAnnouncement.isLoading}
-            >
-              {createAnnouncement.isLoading ? "Submitting..." : "Submit"}
-            </button> */}
-          {/* </form> */}
         </div>
       </div>
     </div>
