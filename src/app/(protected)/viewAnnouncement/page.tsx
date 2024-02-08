@@ -1,7 +1,6 @@
 import { getServerAuthSession } from "@/server/auth";
-// import { db } from "@/server/db";
-import AdminPage from "./AdminViewAnnouncement";
-import UserPage from "./UserViewAnnouncement";
+import AdminPage from "@/app/(protected)/viewAnnouncement/AdminViewAnnouncement";
+import UserPage from "@/app/(protected)/viewAnnouncement/UserViewAnnouncement";
 
 async function Home() {
   const session = (await getServerAuthSession())!;

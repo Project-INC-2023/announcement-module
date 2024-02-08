@@ -5,9 +5,9 @@ import { cookies } from "next/headers";
 
 import { Toaster } from 'sonner';
 import { redirect } from "next/navigation";
-import { SessionProvider } from "next-auth/react";
 import { TRPCReactProvider } from "@/trpc/react";
 import { getServerAuthSession } from "@/server/auth";
+import Navbar from "@/app/_components/navBar";
 
 // protected layout
 const inter = Inter({
@@ -35,6 +35,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
         <TRPCReactProvider cookies={cookies().toString()}>
+          <Navbar />
           {children}
         </TRPCReactProvider>
         <Toaster position="top-center" richColors/>

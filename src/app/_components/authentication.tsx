@@ -54,7 +54,6 @@ const LoginPage = () => {
               redirect: false,
             })
               .then((data) => {
-                console.log(data);
                 if (data?.error === null) {
                   setSignedIn(true);
                   setEmail("");
