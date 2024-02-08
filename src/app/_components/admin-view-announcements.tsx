@@ -3,21 +3,24 @@
 import Link from "next/link";
 
 import { toast } from "sonner";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faEdit } from "@fortawesome/free-regular-svg-icons";
 import type { Announcement } from "@prisma/client"; // changed all types to prisma types
 
 import { api } from "@/trpc/react";
 import { Button } from "@/_components/ui/button";
+import { Textarea } from "@/_components/ui/textarea";
 
 const AdminViewAnnouncements = () => {
   const { data: announcements = [], refetch: reload } =
     api.an.getAllAnnouncements.useQuery();
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
-
+  dayjs.extend(relativeTime);
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto w-2/3">
       <h2 className="py-10 text-2xl font-semibold">Admin Dashboard</h2>
       {announcements.length === 0 ? (
         <p
@@ -31,10 +34,18 @@ const AdminViewAnnouncements = () => {
           {announcements.map((announcement: Announcement) => (
             <li
               key={announcement.id}
-              className="mb-4 rounded-lg bg-gray-200 p-3"
+              className="mb-4 rounded-lg bg-gray-200 px-5 py-3 shadow-lg"
             >
               <div className="flex justify-center gap-10">
-                <div className="flex w-1/2 justify-start">
+                <div className="flex w-4/5 flex-col items-start">
+                  <h3 className=" text-xl font-bold">{announcement.title}</h3>
+                </div>
+                <div className="flex w-1/5 justify-end">
+                  <Button variant="ghost">
+                    <Link className="" href={`admin/edit/${announcement.id}`}>
+                      <FontAwesomeIcon className="h-5" icon={faEdit} />
+                    </Link>
+                  </Button>
                   <Button
                     type="button"
                     variant="ghost"
@@ -59,22 +70,17 @@ const AdminViewAnnouncements = () => {
                     />
                   </Button>
                 </div>
-                <div className="flex w-1/2 justify-end">
-                  <Button variant="ghost">
-                    <Link className="" href={`admin/edit/${announcement.id}`}>
-                      <FontAwesomeIcon className="h-5" icon={faEdit} />
-                    </Link>
-                  </Button>
-                </div>
               </div>
-              <h3 className="text-lg font-bold">{announcement.title}</h3>
-              <p className="text-sm">{announcement.content}</p>
-              <p className="text-xs text-gray-500">
-                Created at: {new Date(announcement.createdAt).toLocaleString()}
-              </p>
-              <p className="text-xs text-gray-500">
-                Updated at: {new Date(announcement.updatedAt).toLocaleString()}
-              </p>
+              <div>
+                <p className="my-5 overflow-scroll text-start text-sm">
+                  <Textarea contentEditable={false}>
+                    {announcement.content}
+                  </Textarea>
+                </p>
+              </div>
+              <div className="flex justify-end text-sm opacity-50">
+                <p>{dayjs(announcement.updatedAt).fromNow()}</p>
+              </div>
             </li>
           ))}
         </ul>
