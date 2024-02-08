@@ -16,4 +16,3 @@ Version 1.3 Fact Sheet
 | App Router     | ✅ Every CRUD Is **defined in its own page** and app router is used                                      |
 | UMS            | **No authentication or App Router** has been enforced for user roles. No communication with the UMS Team |
 | Error Handling | **No consideration** of error                                                                            |
-| handling       |
