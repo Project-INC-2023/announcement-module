@@ -127,7 +127,7 @@ const DataTable = <TData, TValue>({
             variant="outline"
             className="ml-4"
           >
-            Delete Selected
+            Delete  
           </Button>
         )}
         <DropdownMenu>
