@@ -34,10 +34,14 @@ import {
 import { Button } from "@/_components/ui/button"
 import { Input } from "@/_components/ui/input"
 
+import { api } from "@/trpc/react";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
+
+type RowSelectionState = Record<string, boolean>;
 
 const DataTable = <TData, TValue>({
   columns,
@@ -50,8 +54,42 @@ const DataTable = <TData, TValue>({
 
   const [columnVisibility, setColumnVisibility] =
   React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
+  const deleteFunction = api.an.deleteAnnouncement.useMutation();
+
+  const handleDeleteSelected = async () => {
+    const selectedRowIds = Object.keys(rowSelection).filter(
+      (rowId) => rowSelection[rowId]
+    );
+  
+    console.log("Selected row ids:", selectedRowIds);
+  
+    // Log the data array to check its content
+    console.log("Data:", data);
+  
+    // Delete selected rows
+    await Promise.all(selectedRowIds.map(async (rowId) => {
+      // Find the item in the data array with the matching id
+      const rowData = data.find((item) => {
+        
+        if (typeof item === 'object' && item !== null && 'id' in item && item.id === rowId) {
+          return true;
+        }
+        return false;
+      });
+      console.log("Row data for rowId", rowId, ":", rowData);
+      // If rowData is found, delete it
+      if (rowData) {
+        console.log("Deleting row with id:", rowId);
+        await deleteFunction.mutateAsync([rowId]); // Assuming delete function takes the item ID as argument
+      }
+    }));
+  
+    // Clear row selection after deletion
+    setRowSelection({});
+  };
+  
   const table = useReactTable({
     data,
     columns,
@@ -62,7 +100,7 @@ const DataTable = <TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (newRowSelection) => setRowSelection(newRowSelection), // Update rowSelection state
     state: {
       sorting,
       columnFilters,
@@ -73,7 +111,7 @@ const DataTable = <TData, TValue>({
 
   return (
     <div>
-        <div className="flex items-center py-4">
+      <div className="flex items-center py-4">
         <Input
           placeholder="Filter by title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -82,6 +120,15 @@ const DataTable = <TData, TValue>({
           }
           className="max-w-sm"
         />
+        {Object.values(rowSelection).some((selected) => selected) && (
+          <Button
+            onClick={handleDeleteSelected}
+            variant="outline"
+            className="ml-4"
+          >
+            Delete Selected
+          </Button>
+        )}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -111,57 +158,55 @@ const DataTable = <TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  )
+                })}
               </TableRow>
-            ))
-          ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </div>
-
-    <div className="flex-1 text-sm text-muted-foreground">
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} className="h-24 text-center">
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+      <div className="flex-1 text-sm text-muted-foreground pt-4">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
-    </div>
-    
-    <div className="flex items-center justify-end space-x-2 py-4">
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"
@@ -181,6 +226,7 @@ const DataTable = <TData, TValue>({
       </div>
     </div>
   )
+  
 }
 
 export default DataTable;

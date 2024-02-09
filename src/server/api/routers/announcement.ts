@@ -107,27 +107,29 @@ export const announcementRouter = createTRPCRouter({
     }),
 
     deleteAnnouncement: publicProcedure
-    .input(z.string())
+    .input(
+      z.array(z.string())
+    )
     .mutation(async ({ ctx, input }) => {
       try {
-        const deletedAnnouncement = await ctx.db.announcement.delete({
+        const deletedAnnouncements = await ctx.db.announcement.deleteMany({
           where: {
-            id: input,
+            id: { in: input },
           },
         });
 
-        if (!deletedAnnouncement) {
+        if (!deletedAnnouncements.count) {
           throw new TRPCError({
             code: 'NOT_FOUND',
-            message: 'Announcement not found for deletion',
+            message: 'No announcements found for deletion',
           });
         }
 
-        return deletedAnnouncement;
+        return deletedAnnouncements;
       } catch (error) {
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to delete announcement',
+          message: 'Failed to delete announcements',
           cause: error,
         });
       }

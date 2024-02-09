@@ -1,6 +1,8 @@
 "use client"
 
 import type { Announcement } from "@prisma/client"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime";
 import type { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal, ArrowUpDown } from "lucide-react"
 import React, { useState } from "react"
@@ -16,6 +18,9 @@ import {
 
 import { Checkbox } from "@/_components/ui/checkbox"
 
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+/* eslint-disable react-hooks/rules-of-hooks */
+
 function useContentTruncation(initialContent: string, maxLength: number) {
   const [showFullContent, setShowFullContent] = useState(false);
   const truncatedContent = initialContent.length > maxLength ? `${initialContent.substring(0, maxLength)}...` : initialContent;
@@ -26,8 +31,15 @@ function useContentTruncation(initialContent: string, maxLength: number) {
 
   return { showFullContent, toggleContent, truncatedContent };
 }
-    
+
+dayjs.extend(relativeTime);
+
+function useDayJs(currentTime: string) {
+  return dayjs(currentTime).fromNow();
+}
+
 const columns: ColumnDef<Announcement>[] = [
+
     {
         id: "select",
         header: ({ table }) => (
@@ -58,10 +70,8 @@ const columns: ColumnDef<Announcement>[] = [
         accessorKey: "content",
         header: () => <div className="text-center">Content</div>,
         cell: ({ row }) => {
-          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
           const content = (row.getValue("content")) as string;
           const maxLength = 60;
-          // eslint-disable-next-line react-hooks/rules-of-hooks
           const { showFullContent, toggleContent, truncatedContent } = useContentTruncation(content, maxLength);
     
           return (
@@ -89,16 +99,24 @@ const columns: ColumnDef<Announcement>[] = [
               </Button>
             )
           },
-        // cell: ({ row }) => {
-        //   const currentTime = row.getValue
-        //   return (
-
-        //   )
-        // }
+        cell: ({ row }) => {
+          const currentTime = row.getValue("createdAt") as string;
+          const formattedDate = useDayJs(currentTime);
+          return (
+            <div>{formattedDate}</div>          
+          )
+        }
     },
     {
         accessorKey: "updatedAt",
         header: "Updated At",
+        cell: ({ row }) => {
+          const currentTime = row.getValue("updatedAt") as string;
+          const formattedDate = useDayJs(currentTime);
+          return (
+            <div>{formattedDate}</div>
+          )
+        }
     }
 ]
 
