@@ -1,7 +1,8 @@
 "use client"
 
 import React from "react"
-
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 import {
   type SortingState,
   type ColumnFiltersState,
@@ -36,6 +37,8 @@ import { Input } from "@/_components/ui/input"
 
 import { api } from "@/trpc/react";
 
+
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -57,6 +60,7 @@ const DataTable = <TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
+  const router = useRouter();
 
   const handleDeleteSelected = async () => {
     const selectedRowIds = Object.keys(rowSelection).filter(
@@ -65,31 +69,28 @@ const DataTable = <TData, TValue>({
   
     console.log("Selected row ids:", selectedRowIds);
   
-    // Log the data array to check its content
-    console.log("Data:", data);
-  
     // Delete selected rows
     await Promise.all(selectedRowIds.map(async (rowId) => {
-      // Find the item in the data array with the matching id
-      const rowData = data.find((item) => {
-        
-        if (typeof item === 'object' && item !== null && 'id' in item && item.id === rowId) {
-          return true;
+      console.log("Deleting row with id:", rowId);
+      const id = parseInt(rowId, 10);
+      const rowData = data[id];
+      toast.promise(
+        deleteFunction.mutateAsync([rowData.id]), // typescript error i cant seem to fix
+        {
+          loading: "Deleting...",
+          success: () => {
+            return "Deleted!";
+          },
+          error: "Something went wrong!", 
         }
-        return false;
-      });
-      console.log("Row data for rowId", rowId, ":", rowData);
-      // If rowData is found, delete it
-      if (rowData) {
-        console.log("Deleting row with id:", rowId);
-        await deleteFunction.mutateAsync([rowId]); // Assuming delete function takes the item ID as argument
-      }
+      );
     }));
-  
-    // Clear row selection after deletion
+    router.refresh();
+    
     setRowSelection({});
   };
   
+
   const table = useReactTable({
     data,
     columns,
@@ -100,7 +101,7 @@ const DataTable = <TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: (newRowSelection) => setRowSelection(newRowSelection), // Update rowSelection state
+    onRowSelectionChange: (newRowSelection) => setRowSelection(newRowSelection),
     state: {
       sorting,
       columnFilters,
