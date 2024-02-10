@@ -25,5 +25,5 @@ Version 1.5 Fact Sheet
 | App Router     | ✅ Every CRUD Is **defined in its own page** and app router is used                                      |
 | UMS            | **No authentication or App Router** has been enforced for user roles. No communication with the UMS Team |
 | Error Handling | **No consideration** of error                                                                            |
-| Date time | Changed the way our database saves timestamp to be saved now with timezone **timestamptz**                                                                      |
-| Playwright | We also implemented playwright into our current simple announcement module for end to end testing                                                                         |
+| Date time | ✅ Changed the way our database saves timestamp to be saved now with timezone **timestamptz**                                                                      |
+| Playwright | ✅ We also implemented playwright into our current simple announcement module for end to end testing                                                                         |
