@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useState } from "react"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
 import {
@@ -42,6 +42,7 @@ import { api } from "@/trpc/react";
 interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onDelete: (deletedItems: TData[]) => void;
 }
 
 type RowSelectionState = Record<string, boolean>;
@@ -49,9 +50,10 @@ type RowSelectionState = Record<string, boolean>;
 const DataTable = <TData extends { id: string }, TValue>({
   columns,
   data,
+  onDelete,
 }: DataTableProps<TData, TValue>) => {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   )
 
@@ -60,37 +62,46 @@ const DataTable = <TData extends { id: string }, TValue>({
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
-  const router = useRouter();
 
   const handleDeleteSelected = async () => {
+
     const selectedRowIds = Object.keys(rowSelection).filter(
       (rowId) => rowSelection[rowId]
     );
   
     console.log("Selected row ids:", selectedRowIds);
   
-    // Delete selected rows
+    const deletedItems: TData[] = [];
+    // Delete selected rows 
     await Promise.all(selectedRowIds.map(async (rowId) => {
       console.log("Deleting row with id:", rowId);
       const id = parseInt(rowId, 10);
       const rowData = data[id];
       if (rowData?.id) {
-        toast.promise(
-          deleteFunction.mutateAsync([rowData.id.toString()]),
-          {
-            loading: "Deleting...",
-            success: () => {
-              return "Deleted!";
-            },
-            error: "Something went wrong!", 
-          }
-        );
+        try {
+          await deleteFunction.mutateAsync([rowData.id.toString()]);
+          deletedItems.push(rowData);
+        } catch (error) {
+          console.error("Error deleting row:", error);
+        }
       } else {
         console.log("Row data is undefined or does not have an 'id' property:", rowData);
       }
     }));
-    router.refresh();
-    
+  
+    onDelete(deletedItems);
+
+    toast.promise(
+      Promise.resolve(),
+      {
+        loading: "Deleting...",
+        success: () => {
+          return "Deleted!";
+        },
+        error: "Something went wrong!",
+      }
+    );
+  
     setRowSelection({});
   };
   

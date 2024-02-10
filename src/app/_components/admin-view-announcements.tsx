@@ -1,28 +1,19 @@
 "use client";
 
-import Link from "next/link";
-
-import { toast } from "sonner";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faEdit } from "@fortawesome/free-regular-svg-icons";
-import type { Announcement } from "@prisma/client"; // changed all types to prisma types
-
 import { api } from "@/trpc/react";
-import { Button } from "@/_components/ui/button";
-import { Textarea } from "@/_components/ui/textarea";
 import DataTable from "../(protected)/viewAnnouncement/Table/data-table";
 import columns from "../(protected)/viewAnnouncement/Table/columns";
 
 const AdminViewAnnouncements = () => {
   const { data: announcements = [], refetch: reload } = api.an.getAllAnnouncements.useQuery();
 
-  const deleteFunction = api.an.deleteAnnouncement.useMutation();
-  dayjs.extend(relativeTime);
+  const handleDeleteAnnouncements = async () => {
+    await reload();
+  };
+  
   return (
     <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={announcements} />
+      <DataTable columns={columns} data={announcements} onDelete={handleDeleteAnnouncements}/>
     </div>
   );
 };
