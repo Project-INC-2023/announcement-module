@@ -4,17 +4,9 @@ import type { Announcement } from "@prisma/client"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime";
 import type { ColumnDef } from "@tanstack/react-table"
-import { MoreHorizontal, ArrowUpDown } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import React, { useState } from "react"
 import { Button } from "@/_components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/_components/ui/dropdown-menu"
 
 import { Checkbox } from "@/_components/ui/checkbox"
 

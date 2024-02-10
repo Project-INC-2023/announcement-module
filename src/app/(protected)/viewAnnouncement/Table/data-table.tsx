@@ -39,14 +39,14 @@ import { api } from "@/trpc/react";
 
 
 
-interface DataTableProps<TData, TValue> {
+interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
 type RowSelectionState = Record<string, boolean>;
 
-const DataTable = <TData, TValue>({
+const DataTable = <TData extends { id: string }, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) => {
@@ -74,16 +74,20 @@ const DataTable = <TData, TValue>({
       console.log("Deleting row with id:", rowId);
       const id = parseInt(rowId, 10);
       const rowData = data[id];
-      toast.promise(
-        deleteFunction.mutateAsync([rowData.id]), // typescript error i cant seem to fix
-        {
-          loading: "Deleting...",
-          success: () => {
-            return "Deleted!";
-          },
-          error: "Something went wrong!", 
-        }
-      );
+      if (rowData?.id) {
+        toast.promise(
+          deleteFunction.mutateAsync([rowData.id.toString()]),
+          {
+            loading: "Deleting...",
+            success: () => {
+              return "Deleted!";
+            },
+            error: "Something went wrong!", 
+          }
+        );
+      } else {
+        console.log("Row data is undefined or does not have an 'id' property:", rowData);
+      }
     }));
     router.refresh();
     
