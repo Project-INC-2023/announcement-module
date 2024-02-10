@@ -21,7 +21,5 @@ Version 1.4 Fact Sheet
 | -------------- | -------------------------------------------------------------------------------------------------------- |
 | ESLint         | ✅ This Version has been implemented with ESLint. All Errors have been rectified: Link to Docs: https://docs.google.com/document/d/1K3Pf4ypCDHgMYUDHNnoo_tFcWtMwGsPCIYbhSTx6-G4/edit?usp=sharing    |
 | UI             | Used bare UI as no communication has been done with the **UI Team**  Toasts were taken out and changed to static divs                                    |
-| Database       | Database was done with **NO** communication with the UMS Teams or DevOps Team                            |
 | App Router     | ✅ Every CRUD Is **defined in its own page** and app router is used                                      |
 | UMS            | **No authentication or App Router** has been enforced for user roles. No communication with the UMS Team |
-| Error Handling | **No consideration** of error                                                                            |
