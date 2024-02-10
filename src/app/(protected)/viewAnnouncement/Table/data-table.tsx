@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import { toast } from "sonner"
-import { useRouter } from "next/navigation"
+import React, { useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
   type SortingState,
   type ColumnFiltersState,
@@ -14,7 +14,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
 import {
   Table,
@@ -23,24 +23,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/_components/ui/table"
+} from "@/_components/ui/table";
 
 import {
-    DropdownMenu,
-    DropdownMenuCheckboxItem,
-    DropdownMenuContent,
-    DropdownMenuTrigger,
-  } from "@/_components/ui/dropdown-menu"
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/_components/ui/dropdown-menu";
 
-import { Button } from "@/_components/ui/button"
-import { Input } from "@/_components/ui/input"
+import { Button } from "@/_components/ui/button";
+import { Input } from "@/_components/ui/input";
 
 import { api } from "@/trpc/react";
 
-
 interface DataTableProps<TData extends { id: string }, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
   onDelete: (deletedItems: TData[]) => void;
 }
 
@@ -51,29 +50,27 @@ const DataTable = <TData extends { id: string }, TValue>({
   data,
   onDelete,
 }: DataTableProps<TData, TValue>) => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
-    []
-  )
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const [columnVisibility, setColumnVisibility] =
-  React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
   const router = useRouter();
 
-    const handleDeleteSelected = async () => {
+  const handleDeleteSelected = async () => {
+    const selectedRowIds = Object.keys(rowSelection).filter(
+      (rowId) => rowSelection[rowId],
+    );
+    console.log("announcement id", rowSelection);
+    console.log("Selected row ids:", selectedRowIds);
 
-      const selectedRowIds = Object.keys(rowSelection).filter(
-        (rowId) => rowSelection[rowId]
-      );
-      console.log("announcement id", rowSelection)
-      console.log("Selected row ids:", selectedRowIds);
-    
-      const deletedItems: TData[] = [];
-      // Delete selected rows 
-      await Promise.all(selectedRowIds.map(async (rowId) => {
+    const deletedItems: TData[] = [];
+    // Delete selected rows
+    await Promise.all(
+      selectedRowIds.map(async (rowId) => {
         console.log("Deleting row with id:", rowId);
         const id = parseInt(rowId, 10);
         const rowData = data[id];
@@ -85,39 +82,39 @@ const DataTable = <TData extends { id: string }, TValue>({
             console.error("Error deleting row:", error);
           }
         } else {
-          console.log("Row data is undefined or does not have an 'id' property:", rowData);
+          console.log(
+            "Row data is undefined or does not have an 'id' property:",
+            rowData,
+          );
         }
-      }));
-    
-      onDelete(deletedItems);
+      }),
+    );
 
-      toast.promise(
-        Promise.resolve(),
-        {
-          loading: "Deleting...",
-          success: () => {
-            return "Deleted!";
-          },
-          error: "Something went wrong!",
-        }
-      );
-    
-      setRowSelection({});
-    };
+    onDelete(deletedItems);
 
-    const handleEditSelected = () => {
-      const selectedRowIds = Object.keys(rowSelection).filter(
-        (rowId) => rowSelection[rowId]
-      );
+    toast.promise(Promise.resolve(), {
+      loading: "Deleting...",
+      success: () => {
+        return "Deleted!";
+      },
+      error: "Something went wrong!",
+    });
 
-      if (selectedRowIds.length === 1) {
-        const selectedId = selectedRowIds[0];
-        // console.log("row id ", data[])
-        // Navigate to the edit page with the selected ID
-        router.push(`/admin/edit/${selectedId}`);
-      }
-    };
-    
+    setRowSelection({});
+  };
+
+  const handleEditSelected = () => {
+    const selectedRowIds = Object.keys(rowSelection).filter(
+      (rowId) => rowSelection[rowId],
+    );
+
+    if (selectedRowIds.length === 1) {
+      const selectedId = data[Number(selectedRowIds[0])]?.id;
+
+      // Navigate to the edit page with the selected ID
+      router.push(`/admin/edit/${selectedId}`);
+    }
+  };
 
   const table = useReactTable({
     data,
@@ -162,9 +159,12 @@ const DataTable = <TData extends { id: string }, TValue>({
           onClick={handleEditSelected}
           variant="outline"
           className="ml-4"
-          disabled={Object.values(rowSelection).filter(selected => selected).length !== 1}
-        >  
-          Edit       
+          disabled={
+            Object.values(rowSelection).filter((selected) => selected)
+              .length !== 1
+          }
+        >
+          Edit
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -175,9 +175,7 @@ const DataTable = <TData extends { id: string }, TValue>({
           <DropdownMenuContent align="end">
             {table
               .getAllColumns()
-              .filter(
-                (column) => column.getCanHide()
-              )
+              .filter((column) => column.getCanHide())
               .map((column) => {
                 return (
                   <DropdownMenuCheckboxItem
@@ -190,7 +188,7 @@ const DataTable = <TData extends { id: string }, TValue>({
                   >
                     {column.id}
                   </DropdownMenuCheckboxItem>
-                )
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
@@ -207,10 +205,10 @@ const DataTable = <TData extends { id: string }, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -224,14 +222,20 @@ const DataTable = <TData extends { id: string }, TValue>({
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
                   No results.
                 </TableCell>
               </TableRow>
@@ -239,7 +243,7 @@ const DataTable = <TData extends { id: string }, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex-1 text-sm text-muted-foreground pt-4">
+      <div className="flex-1 pt-4 text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{" "}
         {table.getFilteredRowModel().rows.length} row(s) selected.
       </div>
@@ -262,8 +266,7 @@ const DataTable = <TData extends { id: string }, TValue>({
         </Button>
       </div>
     </div>
-  )
-  
-}
+  );
+};
 
 export default DataTable;
