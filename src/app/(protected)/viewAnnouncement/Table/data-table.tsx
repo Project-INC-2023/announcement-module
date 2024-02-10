@@ -38,7 +38,6 @@ import { Input } from "@/_components/ui/input"
 import { api } from "@/trpc/react";
 
 
-
 interface DataTableProps<TData extends { id: string }, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -62,49 +61,63 @@ const DataTable = <TData extends { id: string }, TValue>({
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   const deleteFunction = api.an.deleteAnnouncement.useMutation();
+  const router = useRouter();
 
-  const handleDeleteSelected = async () => {
+    const handleDeleteSelected = async () => {
 
-    const selectedRowIds = Object.keys(rowSelection).filter(
-      (rowId) => rowSelection[rowId]
-    );
-  
-    console.log("Selected row ids:", selectedRowIds);
-  
-    const deletedItems: TData[] = [];
-    // Delete selected rows 
-    await Promise.all(selectedRowIds.map(async (rowId) => {
-      console.log("Deleting row with id:", rowId);
-      const id = parseInt(rowId, 10);
-      const rowData = data[id];
-      if (rowData?.id) {
-        try {
-          await deleteFunction.mutateAsync([rowData.id.toString()]);
-          deletedItems.push(rowData);
-        } catch (error) {
-          console.error("Error deleting row:", error);
+      const selectedRowIds = Object.keys(rowSelection).filter(
+        (rowId) => rowSelection[rowId]
+      );
+      console.log("announcement id", rowSelection)
+      console.log("Selected row ids:", selectedRowIds);
+    
+      const deletedItems: TData[] = [];
+      // Delete selected rows 
+      await Promise.all(selectedRowIds.map(async (rowId) => {
+        console.log("Deleting row with id:", rowId);
+        const id = parseInt(rowId, 10);
+        const rowData = data[id];
+        if (rowData?.id) {
+          try {
+            await deleteFunction.mutateAsync([rowData.id.toString()]);
+            deletedItems.push(rowData);
+          } catch (error) {
+            console.error("Error deleting row:", error);
+          }
+        } else {
+          console.log("Row data is undefined or does not have an 'id' property:", rowData);
         }
-      } else {
-        console.log("Row data is undefined or does not have an 'id' property:", rowData);
-      }
-    }));
-  
-    onDelete(deletedItems);
+      }));
+    
+      onDelete(deletedItems);
 
-    toast.promise(
-      Promise.resolve(),
-      {
-        loading: "Deleting...",
-        success: () => {
-          return "Deleted!";
-        },
-        error: "Something went wrong!",
+      toast.promise(
+        Promise.resolve(),
+        {
+          loading: "Deleting...",
+          success: () => {
+            return "Deleted!";
+          },
+          error: "Something went wrong!",
+        }
+      );
+    
+      setRowSelection({});
+    };
+
+    const handleEditSelected = () => {
+      const selectedRowIds = Object.keys(rowSelection).filter(
+        (rowId) => rowSelection[rowId]
+      );
+
+      if (selectedRowIds.length === 1) {
+        const selectedId = selectedRowIds[0];
+        // console.log("row id ", data[])
+        // Navigate to the edit page with the selected ID
+        router.push(`/admin/edit/${selectedId}`);
       }
-    );
-  
-    setRowSelection({});
-  };
-  
+    };
+    
 
   const table = useReactTable({
     data,
@@ -142,9 +155,17 @@ const DataTable = <TData extends { id: string }, TValue>({
             variant="outline"
             className="ml-4"
           >
-            Delete  
+            Delete
           </Button>
         )}
+        <Button
+          onClick={handleEditSelected}
+          variant="outline"
+          className="ml-4"
+          disabled={Object.values(rowSelection).filter(selected => selected).length !== 1}
+        >  
+          Edit       
+        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
