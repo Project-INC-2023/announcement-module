@@ -4,7 +4,16 @@
 
 ### This research project is done by Han Ming and Jerald.
 
-This code was done with the worst practices in place to be used to compare with other versions to teach the importance of having standard when it comes to working with a team and coding practices
+In Singapore Polytechnic Computing courses, Year 1 students will go through Computing Fundamentals in Y1S1. Notably, Diploma in information technology will take up both backend and frontend development. However Juniors are taught on a very surface level on backend and frontend development concepts.
+
+As a note for FED juniors are taught (CSS and HTML) and BED (JS, ExpressJS)
+
+Most Juniors have a mentality that as long as their code works, it is fine. This will result in them having bad habits especially when working with bigger teams. 
+
+This also has affected the students in the INC Program. Not understanding how teams should address their coding standards. Which in turn will result in time wasted when it could have been prevented if communication and good coding practices were in place. To Address this, The Announcement Module team has defined the following OKRs to provide knowledge that can be used to educate future batches in SoC. Our project has been broken down into many versions to simulate different circumstances when there is lack of communication and good coding practices. Students are able to see the code qualities at different versions, which will make them realize why communication, collaboration and good coding practices are paramount to efficiently executing team projects.
+
+Announcement Module uses T3 Stack (typescript)
+
 
 Version 1.3 Fact Sheet
 
