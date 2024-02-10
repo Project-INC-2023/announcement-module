@@ -3,10 +3,13 @@ import "@/styles/globals.css";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
-import { TRPCReactProvider } from "@/trpc/react";
-
 import { Toaster } from 'sonner';
+import { redirect } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
+import { TRPCReactProvider } from "@/trpc/react";
+import { getServerAuthSession } from "@/server/auth";
 
+// protected layout
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -18,11 +21,16 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({
+// eslint-disable-next-line react/function-component-definition
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+    // users who are not logged in cannot enter any pages except login
+   const session = await getServerAuthSession();
+   if (!session?.user) return redirect("/");
+
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>

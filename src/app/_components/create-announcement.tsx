@@ -1,20 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import { api } from "@/trpc/react";
-import { CreateAnnouncementProps } from "@/types/announcement";
-
+import { z } from "zod";
 import { toast } from "sonner";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+  Form,
+} from "@/_components/ui/form";
+import { api } from "@/trpc/react";
+import { Input } from "@/_components/ui/input";
+import { Button } from "@/_components/ui/button";
 
-export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
-  announcementCreated,
-}) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+const announcementSchema = z.object({
+  title: z
+    .string()
+    .min(2, {
+      message: "Title must be at least 2 characters.",
+    })
+    .max(50, {
+      message: "Title has to be lesser than 50 characters.",
+    }),
+  content: z.string().min(4, {
+    message: "Content must be at least 4 characters.",
+  }),
+});
+
+const CreateAnnouncement = () => {
+  const form = useForm<z.infer<typeof announcementSchema>>({
+    resolver: zodResolver(announcementSchema),
+    defaultValues: {
+      title: "",
+      content: "",
+    },
+  });
 
   const createAnnouncement = api.an.createAnnouncement.useMutation({
     onSuccess: (newAnnouncement) => {
-      announcementCreated(newAnnouncement);
       toast.success(`${newAnnouncement.title} announcement has been added`);
     },
     onError: (error) => {
@@ -22,25 +49,16 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
     },
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!title || !content) {
-      toast.error("Please fill in both title and content.");
-      return;
-    }
-
+  function onSubmit(values: z.infer<typeof announcementSchema>) {
     try {
       createAnnouncement.mutate({
-        title,
-        content,
+        title: values.title,
+        content: values.content,
       });
-      setTitle("");
-      setContent("");
     } catch (error) {
-      toast.error(`Error creating announcement: ${(error as Error).message}`);
+      toast.error(`Error creating announcement`);
     }
-  };
+  }
 
   return (
     <div className="flex h-full flex-col">
@@ -49,31 +67,48 @@ export const CreateAnnouncement: React.FC<CreateAnnouncementProps> = ({
           <h1 className="mb-4 text-center text-2xl font-bold">
             Create Announcement
           </h1>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-            />
-            <textarea
-              placeholder="Content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 focus:border-blue-500 focus:outline-none"
-              rows={4}
-            ></textarea>
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-blue-500 py-3 font-semibold text-white transition hover:bg-blue-600 focus:bg-blue-600 focus:outline-none"
-              disabled={createAnnouncement.isLoading}
-            >
-              {createAnnouncement.isLoading ? "Submitting..." : "Submit"}
-            </button>
-          </form>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Title" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Title.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Content" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      This is your Announcement Content.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Create Announcement</Button>
+            </form>
+          </Form>
         </div>
       </div>
     </div>
   );
 };
+
+export default CreateAnnouncement;

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import superjson from "superjson";
 
